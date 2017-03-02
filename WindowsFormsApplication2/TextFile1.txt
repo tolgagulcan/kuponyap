@@ -1,0 +1,151 @@
+﻿ if (level==1)       //beşiktaş banko
+            {
+                if (kupon[0] != 1 )
+                {
+                    return false;
+                }
+            }
+            if (level == 2)       //fener banko
+            {
+                if (kupon[1] != 2)
+                {
+                    return false;
+                }
+            }
+            if (level == 3)       //galatasaray yenilmez
+            {
+                if (kupon[2] == 2)
+                {
+                    return false;
+                }
+            }
+            if (level == 4)       //trabzon herşey olabilir
+            {
+                if (false)
+                {
+                    return false;
+                }
+            }
+            if (level == 5)       //mersin ile sivas berabere kalmaz
+            {
+                if (kupon[4] == 0)
+                {
+                    return false;
+                }
+            }
+            if (level == 6)       //kayseri gençler herşey olabilir
+            {
+                if (false)
+                {
+                    return false;
+                }
+            }
+            if (level == 7)       //bursa çaykur rize berabere kalmaz
+            {
+                if (kupon[6] ==0 )
+                {
+                    return false;
+                }
+            }
+            if (level == 8)       //osmanlı yenilmez
+            {
+                if (kupon[7] == 2)
+                {
+                    return false;
+                }
+            }
+            if (level == 9)       //kasımpaşa antalya berabere kalmaz
+            {
+                if (kupon[8] == 0)
+                {
+                    return false;
+                }
+            }
+            if (level == 10)       //arsenal yenilmez
+            {
+                if (kupon[9] == 1)
+                {
+                    return false;
+                }
+            }
+            if (level == 11)       //worlsburg berabere kalmaz
+            {
+                if (kupon[10] == 0)
+                {
+                    return false;
+                }
+            }
+            if (level == 12)       //bayern banko
+            {
+                if (false)
+                {
+                    return false;
+                }
+            }
+            if (level == 13)       //roma yenilmez
+            {
+                if (kupon[12] == 2)
+                {
+                    return false;
+                }
+            }
+            if (level == 14)       //barcelona banko
+            {
+                if (kupon[13] != 2)
+                {
+                    return false;
+                }
+            }
+            if (level == 15)       //atletico banko banko
+            {
+                if (kupon[14] != 2)
+                {
+                    return false;
+                }
+            }
+            int count = 0;
+            if (level==15)
+            {
+                for (int i = 0; i < 15; i++)
+                {
+                    if (kupon[i] == 0) { count++; }
+                }
+                if (count > maxnumofberaberlik || count<minnumofberaberlik) { return false; }
+            }
+            if (level == 11)       //atletico banko banko
+            {
+                if (kupon[10] == 2 && kupon[11] == 2)
+                {
+                    return false;
+                }
+            }
+            if (level == 6)       //atletico banko banko
+            {
+                if (kupon[3] == 0 && kupon[5] == 0)
+                {
+                    return false;
+                }
+            }
+            count = 0;
+            int say = 0;
+            if (level == 9)       //atletico banko banko
+            {
+                say= kupon[2]==1? count++ : count;
+                say = kupon[3] == 1 ? ++count : count;
+                say = kupon[4] == 1 ? ++count : count;
+                say = kupon[5] == 1 ? ++count : count;
+                say = kupon[6] == 1 ? ++count : count;
+                say = kupon[7] == 1 ? ++count : count;
+                say = kupon[8] == 1 ? ++count : count;
+                if (say>3)
+                {
+                    return false;
+                }
+            }
+            if (level == 13)       //barcelona banko
+            {
+                if (kupon[12] == 0 && kupon[10] == 1)
+                {
+                    return false;
+                }
+            }
