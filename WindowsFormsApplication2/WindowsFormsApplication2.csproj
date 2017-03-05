@@ -125,6 +125,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TextFile2.txt" />
     <None Include="Resources\Image1.bmp" />
     <Content Include="TextFile1.txt" />
   </ItemGroup>

@@ -66,7 +66,6 @@ namespace WindowsFormsApplication2
                 ilksecim.kupondoldur(kk);
                 file1.Close();
             }
-           
         }
         private void ilksecim_Load(object sender, EventArgs e)
         {
@@ -86,7 +85,11 @@ namespace WindowsFormsApplication2
             }
             for (int i = 1; i < fline.Length; i++)
             {
-                k[i - 1].altfiltreler.Add(k[i]);
+                k[i - 1].subfiltre = k[i];
+            }
+            for (int i = fline.Length-1; i >=1; i--)
+            {
+                k[i].parentfiltre = k[i-1];
             }
             return k[0];
         }
@@ -164,7 +167,6 @@ namespace WindowsFormsApplication2
             {
                 ilktercih[i] = ((sonuc)Enum.Parse(typeof(sonuc), "m" + tercih[i])) ^ sonuc.m102;
             }
-
             for (int i = 0; i < rt1.Lines.Length; i++)
             {
                 string[] fline = rt1.Lines[i].Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);

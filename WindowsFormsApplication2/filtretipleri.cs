@@ -10,73 +10,91 @@ namespace WindowsFormsApplication2
         public Dictionary<int, sonuc> etkilenenmaclar = null;
         public olmak olsunmu = olmak.olsun;
         int[] sayi; int istenenmax; int istenenmin;
-        int[] sayi1; int istenenmax1; int istenenmin1;
-        public List<macfiltre> altfiltreler = new List<macfiltre>();
-        public macfiltre(Dictionary<int, sonuc> k, int[] tane, olmak ols = olmak.olsun)
+        public macfiltre subfiltre = null;
+        public macfiltre parentfiltre = null;
+        public macfiltre tersfiltre = null;
+        public macfiltre dipfiltre = null;
+        public macfiltre deep()
         {
-            etkilenenmaclar = k;
-            olsunmu = ols;
-            
-            int[] a1, a2;
-            int mmax1, mmin1, mmax2, mmin2;
-
-            a1 = tane.OrderBy(i => i).ToArray(); mmax1 = a1.Max(); mmin1 = a1.Min();
-
+            if (dipfiltre != null)
+            {
+                return dipfiltre;
+            }
+            if (subfiltre == null)
+            {
+                return dipfiltre = this;
+            }
+            else
+            {
+                dipfiltre = subfiltre.deep();
+            }
+            return dipfiltre;
+        }
+        public macfiltre ters()
+        {
+            if (tersfiltre != null)
+            {
+                return tersfiltre;
+            }
+            int[] a1;
             int nerde = 0;
-            a2 = new int[etkilenenmaclar.Count + 1 - tane.Length];
+            if (sayi.Length >= (etkilenenmaclar.Count + 1))
+            {
+                return null;
+            }
+            a1 = new int[etkilenenmaclar.Count + 1 - sayi.Length];
             for (int i = 0; i <= etkilenenmaclar.Count; i++)
             {
                 bool ekle = true;
-                for (int s = 0; s < tane.Length; s++)
+                for (int s = 0; s < sayi.Length; s++)
                 {
-
-                    if (i == tane[s])
+                    if (i == sayi[s])
                     {
                         ekle = false;
-
                     }
-
                 }
                 if (ekle)
                 {
-                    a2[nerde] = i;
+                    a1[nerde] = i;
                     nerde++;
                 }
             }
-
-            mmax2 = a2.Max(); mmin2 = a2.Min();
-            a2 = a2.OrderBy(i => i).ToArray();
-
-
-            if (olsunmu == olmak.olsun)
+            tersfiltre = new macfiltre(etkilenenmaclar, a1, olmak.olsun);
+            return tersfiltre;
+        }
+        public macfiltre(Dictionary<int, sonuc> k, int[] tane, olmak ols = olmak.olsun)
+        {
+            if (tane.Length==0 || tane.Length==(k.Count+1))
             {
-                sayi = a1; istenenmax = mmax1; istenenmin = mmin1;
-                sayi1 = a2; istenenmax1 = mmax2; istenenmin1 = mmin2;
+                throw new Exception("wrong number of wanted numbers");
             }
-
+            etkilenenmaclar = k;
+            olsunmu = ols;
+            sayi = tane.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min(); ;
+        }
+        public bool broke(liste a, bool force = false)
+        {
             if (olsunmu == olmak.olmasin)
             {
-
-                sayi1 = a1; istenenmax1 = mmax2; istenenmin1 = mmin2;
-                sayi = a2; istenenmax = mmax1; istenenmin = mmin1;
-
+                if (ters() != null)
+                {
+                    ters().broke(a);
+                }
+                else
+                {
+                    a.dead = true;
+                }
+                return true;
             }
-
-
-
-
-        }
-        public bool broke(liste a)
-        {
             if (a.dead)
             {
                 return false;
             }
             if (uygunmu(a))
             {
-                if (a.dallar == null)
+                if (a.dallar == null || force == true)
                 {
-                    parcala(a);
+                    parcalatoptan(a);
                 }
                 else
                 {
@@ -91,12 +109,10 @@ namespace WindowsFormsApplication2
             }
             return true;
         }
-
-        public bool uygunmu(liste a,bool altfiltre=false)
+        public bool uygunmu(liste a)
         {
             int uygun = 0;
-          
-
+            bool dondur = true;
             foreach (var item in etkilenenmaclar)
             {
                 if (nlookup[(int)a.cati[item.Key - 1] - 1, (int)item.Value - 1] != 1)
@@ -106,150 +122,158 @@ namespace WindowsFormsApplication2
             }
             if (uygun < istenenmin)
             {
-                if (altfiltreler.Count == 0 || altfiltre == false)
-                {
-                    a.dead = true;
-                    
-
-                }
+                a.dead = true;
                 return false;
             }
-
-            if (altfiltreler.Count!=0)
-            {
-                foreach (var item in altfiltreler)
-                {
-                    if (item.uygunmu(a,true)==false)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-
-
-            return true;
-
+            return dondur;
         }
-        public bool parcala(liste a, olmak ne = olmak.olsun)
+        public bool parcalatoptan(liste a)
         {
-            
-                List<int> etkilenenler = new List<int>();
-                List<sonuc> olsun = new List<sonuc>();
-                List<sonuc> olmasin = new List<sonuc>();
-                List<sonuc> both = new List<sonuc>();
-
-
-                int halihazir = 0;
-                foreach (var item in etkilenenmaclar)
-                {
-                    int sonuc = nlookup[(int)a.cati[item.Key - 1] - 1, (int)item.Value - 1];
-                    if (sonuc == 2)
-                    {
-                        etkilenenler.Add(item.Key);
-                        both.Add(a.cati[item.Key - 1]);
-                        sonuc deger = a.cati[item.Key - 1] & item.Value;
-                        olsun.Add(deger);
-                        olmasin.Add(a.cati[item.Key - 1] ^ deger);
-                    }
-                    else if (sonuc == 0)
-                    {
-                        halihazir++;
-                    }
-                }
-
-                List<int> bulunacaklar = new List<int>();
-
-
-                foreach (var item in sayi)
-                {
-                    if (item - halihazir <= etkilenenler.Count && item - halihazir >= 0)
-                    {
-                        bulunacaklar.Add(item - halihazir);
-                    }
-                }
-                if (halihazir > istenenmax)
-                {
-                    a.dead = true;
-                    return false;
-                }
-                if (etkilenenler.Count == 0)
-                {
-                    return false;
-                }
-
-                if (bulunacaklar.Count == 0)
-                {
-                    //a.dead = true;
-                    return false;
-                }
-
-
-                sonuc[,] degerler = new sonuc[olsun.Count, 3];
-                for (int i = 0; i < olsun.Count; i++)
-                {
-                    degerler[i, 0] = olsun[i];
-                    degerler[i, 1] = olmasin[i];
-                    degerler[i, 2] = both[i];
-
-                }
-
-                int[] bulcomb = bulunacaklar.ToArray();
-                Dictionary<int, int> bbb = new Dictionary<int, int>();
-                int first = bulcomb[0];
-                bbb.Add(first, first);
-
-                for (int i = 1; i < bulcomb.Length; i++)
-                {
-                    if (bulcomb[i] == bulcomb[i - 1] + 1)
-                    {
-                        bbb[first] = bulcomb[i];
-                    }
-                    else
-                    {
-                        first = bulcomb[i];
-                        bbb.Add(bulcomb[i], bulcomb[i]);
-                    }
-
-                }
-
-
-                if (a.dallar == null)
-                {
-                    a.dallar = new List<liste>();
-                }
-
-
-
-                foreach (var item in bbb)
-                {
-                    List<int[]> k = buyuklisteler.listedondur(etkilenenler.Count, item.Key, item.Value);
-
-                    for (int i = 0; i < k.Count; i++)
-                    {
-                        a.dallar.Add(new liste());
-                        a.dallar[a.dallar.Count - 1].cati = new sonuc[15];
-                        a.cati.CopyTo(a.dallar[a.dallar.Count - 1].cati, 0);
-
-                        for (int s = 0; s < etkilenenler.Count; s++)
-                        {
-                            a.dallar[a.dallar.Count - 1].cati[etkilenenler[s] - 1] = degerler[s, k[i][s]];
-                        }
-                    }
-
-
-
-                }
-
-
-
-                a.parcalayan = this;
+            if (subfiltre == null && parentfiltre == null)
+            {
+                parcala(a);
                 return true;
             }
-        
-
-        
-
+            else
+            {
+                listesayili k;
+                if (deep().ters()!=null)
+                {
+                    deep().ters().parcala(a);
+                }
+                k = deep().parcala(a);
+                List<liste> donentoplam = new List<liste>();
+                for (int i = k.donenmin; i <= k.donenmax; i++)
+                {
+                    donentoplam.Add(k.donen[i]);
+                }
+                macfiltre s = deep();
+                while ((s = s.parentfiltre) != null)
+                {
+                    List<liste> yedek = new List<liste>();
+                    foreach (var item in donentoplam)
+                    {
+                        if (s != this)
+                        {
+                            s.ters().parcala(item);
+                        }
+                        {
+                            k = s.parcala(item);
+                            if (k!=null)
+                            {
+                                for (int i = k.donenmin; i < k.donenmax; i++)
+                                {
+                                    yedek.Add(k.donen[i]);
+                                }
+                            }
+                        }
+                    }
+                    donentoplam = yedek;
+                }
+            }
+            return true;
+        }
+        public listesayili parcala(liste a, olmak olsunmu = olmak.olsun)
+        {
+            List<int> etkilenenler = new List<int>();
+            List<sonuc> olsun = new List<sonuc>();
+            List<sonuc> olmasin = new List<sonuc>();
+            List<sonuc> both = new List<sonuc>();
+            int halihazir = 0;
+            foreach (var item in etkilenenmaclar)
+            {
+                int sonuc = nlookup[(int)a.cati[item.Key - 1] - 1, (int)item.Value - 1];
+                if (sonuc == 2)
+                {
+                    etkilenenler.Add(item.Key);
+                    both.Add(a.cati[item.Key - 1]);
+                    sonuc deger = a.cati[item.Key - 1] & item.Value;
+                    olsun.Add(deger);
+                    olmasin.Add(a.cati[item.Key - 1] ^ deger);
+                }
+                else if (sonuc == 0)
+                {
+                    halihazir++;
+                }
+            }
+            List<int> bulunacaklar = new List<int>();
+            foreach (var item in sayi)
+            {
+                if (item - halihazir <= etkilenenler.Count && item - halihazir >= 0)
+                {
+                    bulunacaklar.Add(item - halihazir);
+                }
+            }
+            if (halihazir > istenenmax)
+            {
+                a.dead = true;
+                return null;
+            }
+            if (etkilenenler.Count == 0)
+            {
+                return null;
+            }
+            if (bulunacaklar.Count == 0)
+            {
+                //a.dead = true;
+                return null;
+            }
+            sonuc[,] degerler = new sonuc[olsun.Count, 3];
+            for (int i = 0; i < olsun.Count; i++)
+            {
+                degerler[i, 0] = olsun[i];
+                degerler[i, 1] = olmasin[i];
+                degerler[i, 2] = both[i];
+            }
+            int[] bulcomb = bulunacaklar.ToArray();
+            Dictionary<int, int> bbb = new Dictionary<int, int>();
+            int first = bulcomb[0];
+            bbb.Add(first, first);
+            for (int i = 1; i < bulcomb.Length; i++)
+            {
+                if (bulcomb[i] == bulcomb[i - 1] + 1)
+                {
+                    bbb[first] = bulcomb[i];
+                }
+                else
+                {
+                    first = bulcomb[i];
+                    bbb.Add(bulcomb[i], bulcomb[i]);
+                }
+            }
+            int donenmin = 0;
+            int donenmax = 0;
+            if (a.dallar == null)
+            {
+                a.dallar = new List<liste>();
+                donenmin = 0;
+            }
+            else
+            {
+                donenmin = a.dallar.Count;
+            }
+            foreach (var item in bbb)
+            {
+                List<int[]> k = buyuklisteler.listedondur(etkilenenler.Count, item.Key, item.Value);
+                for (int i = 0; i < k.Count; i++)
+                {
+                    a.dallar.Add(new liste());
+                    a.dallar[a.dallar.Count - 1].cati = new sonuc[15];
+                    a.cati.CopyTo(a.dallar[a.dallar.Count - 1].cati, 0);
+                    for (int s = 0; s < etkilenenler.Count; s++)
+                    {
+                        a.dallar[a.dallar.Count - 1].cati[etkilenenler[s] - 1] = degerler[s, k[i][s]];
+                    }
+                }
+            }
+            donenmax = a.dallar.Count - 1;
+            a.parcalayan = this;
+            listesayili donenliste = new listesayili();
+            donenliste.donen = a.dallar;
+            donenliste.donenmin = donenmin;
+            donenliste.donenmax = donenmax;
+            return donenliste;
+        }
     }
     public static class tanimlamalar
     {
@@ -267,10 +291,10 @@ namespace WindowsFormsApplication2
         {
             public bool dead = false;
             public liste parent = null;
-
             public sonuc[] cati;
             public macfiltre parcalayan = null;
             public List<liste> dallar = null;
+            public int olummin; public int olummax;
             public int boyut()
             {
                 int toplam = 0;
@@ -356,7 +380,12 @@ namespace WindowsFormsApplication2
                 return boyut;
             }
         }
-
+        public class listesayili
+        {
+            public List<liste> donen;
+            public int donenmin;
+            public int donenmax;
+        }
         [Flags]
         public enum sonuc : byte
         {
@@ -382,8 +411,5 @@ namespace WindowsFormsApplication2
             olmasin = 0x2,
             ikisi = olsun | olmasin
         }
-
-
-
     }
 }

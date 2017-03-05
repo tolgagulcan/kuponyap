@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace WindowsFormsApplication2
 {
     public static class buyuklisteler
@@ -15,7 +14,6 @@ namespace WindowsFormsApplication2
             {
                 return listeler[kactane - 1][arrayindex(kactane, min, max)];
             }
-
             int sol = 0;
             int sag = kactane;
             int level = kactane;
@@ -26,14 +24,10 @@ namespace WindowsFormsApplication2
             }
             listeler[kactane - 1][arrayindex(kactane, min, max)] = new List<int[]>();
             int a = toplam(kactane, (min > max) ? max : min, (min > max) ? min : max, sol, sag, level, kupon, listeler[kactane - 1][arrayindex(kactane, min, max)]);
-            
-            
             return listeler[kactane - 1][arrayindex(kactane, min, max)];
         }
         static int toplam(int sayi, int min = 0, int max = 15, int sol = 0, int sag = 15, int level = 15, int[] kupon = null, List<int[]> kuponlar = null)
         {
-
-            
             if (min <= sol && max >= sag)
             {
                 kuponlar.Add(kupon);
@@ -52,7 +46,6 @@ namespace WindowsFormsApplication2
             }
         }
         public static List<int[]>[][] listeler = new List<int[]>[15][];
-
         static buyuklisteler()
         {
             listeler[0] = new List<int[]>[3];
@@ -71,7 +64,6 @@ namespace WindowsFormsApplication2
             listeler[13] = new List<int[]>[120];
             listeler[14] = new List<int[]>[136];
         }
-
         public static int arrayindex(int sayi, int min, int max)
         {
             if (min == max)
