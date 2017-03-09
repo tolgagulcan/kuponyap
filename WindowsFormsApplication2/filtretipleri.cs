@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kw.Combinatorics;
 using static WindowsFormsApplication2.tanimlamalar;
 namespace WindowsFormsApplication2
 {
@@ -64,7 +63,7 @@ namespace WindowsFormsApplication2
         }
         public macfiltre(Dictionary<int, sonuc> k, int[] tane, olmak ols = olmak.olsun)
         {
-            if (tane.Length==0 || tane.Length==(k.Count+1))
+            if (tane.Length == 0 || tane.Length == (k.Count + 1))
             {
                 throw new Exception("wrong number of wanted numbers");
             }
@@ -72,7 +71,7 @@ namespace WindowsFormsApplication2
             olsunmu = ols;
             sayi = tane.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min(); ;
         }
-        public bool broke(liste a, bool force = false)
+        public bool broke(liste a)
         {
             if (olsunmu == olmak.olmasin)
             {
@@ -90,9 +89,9 @@ namespace WindowsFormsApplication2
             {
                 return false;
             }
-            if (uygunmu(a))
+            if (uygunmutoptan(a))
             {
-                if (a.dallar == null || force == true)
+                if (a.dallar == null)
                 {
                     parcalatoptan(a);
                 }
@@ -109,8 +108,32 @@ namespace WindowsFormsApplication2
             }
             return true;
         }
-        public bool uygunmu(liste a)
+
+        public bool uygunmutoptan(liste a)
         {
+            if (subfiltre == null)
+            {
+                return uygunmu(a);
+            }
+            else
+            {
+                if (parentfiltre != null)
+                {
+                    return subfiltre.uygunmu(a) & uygunmu(a);
+                }
+                else
+                {
+                    return subfiltre.uygunmu(a);
+                }
+
+            }
+
+
+
+        }
+        public bool uygunmu(liste a,bool forcedead=true)
+        {
+            macfiltre dfg = this;
             int uygun = 0;
             bool dondur = true;
             foreach (var item in etkilenenmaclar)
@@ -122,59 +145,80 @@ namespace WindowsFormsApplication2
             }
             if (uygun < istenenmin)
             {
-                a.dead = true;
+                if (forcedead==true)
+                {
+                    a.dead = true;
+                }
+                
                 return false;
             }
             return dondur;
         }
         public bool parcalatoptan(liste a)
         {
-            if (subfiltre == null && parentfiltre == null)
+            if (subfiltre == null)
             {
                 parcala(a);
                 return true;
             }
             else
             {
-                listesayili k;
-                if (deep().ters()!=null)
-                {
-                    deep().ters().parcala(a);
-                }
-                k = deep().parcala(a);
-                List<liste> donentoplam = new List<liste>();
-                for (int i = k.donenmin; i <= k.donenmax; i++)
-                {
-                    donentoplam.Add(k.donen[i]);
-                }
+                List<liste> k;
                 macfiltre s = deep();
-                while ((s = s.parentfiltre) != null)
+                List<liste> donentoplam = new List<liste>();
+                donentoplam.Add(a);
+
+
+                do
                 {
                     List<liste> yedek = new List<liste>();
+                    k = null;
+
+
                     foreach (var item in donentoplam)
                     {
+
                         if (s != this)
                         {
-                            s.ters().parcala(item);
-                        }
-                        {
-                            k = s.parcala(item);
-                            if (k!=null)
+                            if (s.ters().uygunmu(item,false))
                             {
-                                for (int i = k.donenmin; i < k.donenmax; i++)
-                                {
-                                    yedek.Add(k.donen[i]);
-                                }
+                                s.ters().parcala(item,false);
+                            }
+
+                            if (s.uygunmu(item,false))
+                            {
+                                k = s.parcala(item,false);
+                            }
+
+                        }
+                        else
+                        {
+                            if (s.uygunmu(item))
+                            {
+                                s.parcala(item);
                             }
                         }
+
+
+
+                        if (k != null)
+                        {
+                            foreach (var st in k)
+                            {
+                                yedek.Add(st);
+                            }
+                            
+                        }
                     }
+
                     donentoplam = yedek;
-                }
+                } while ((s = s.parentfiltre) != null);
             }
             return true;
         }
-        public listesayili parcala(liste a, olmak olsunmu = olmak.olsun)
+        public List<liste> parcala(liste a, bool forcedead = true)
         {
+            List<liste> olusturulanlar = new List<liste>();
             List<int> etkilenenler = new List<int>();
             List<sonuc> olsun = new List<sonuc>();
             List<sonuc> olmasin = new List<sonuc>();
@@ -206,17 +250,28 @@ namespace WindowsFormsApplication2
             }
             if (halihazir > istenenmax)
             {
-                a.dead = true;
-                return null;
+                if (forcedead==true)
+                {
+                      a.dead = true;
+                }
+
+                olusturulanlar.Add(a);
+
+                return olusturulanlar;
             }
             if (etkilenenler.Count == 0)
             {
-                return null;
+                olusturulanlar.Add(a);
+
+                return olusturulanlar;
+               
             }
             if (bulunacaklar.Count == 0)
             {
-                //a.dead = true;
-                return null;
+                
+                olusturulanlar.Add(a);
+
+                return olusturulanlar;
             }
             sonuc[,] degerler = new sonuc[olsun.Count, 3];
             for (int i = 0; i < olsun.Count; i++)
@@ -241,16 +296,12 @@ namespace WindowsFormsApplication2
                     bbb.Add(bulcomb[i], bulcomb[i]);
                 }
             }
-            int donenmin = 0;
-            int donenmax = 0;
+         
+         
             if (a.dallar == null)
             {
                 a.dallar = new List<liste>();
-                donenmin = 0;
-            }
-            else
-            {
-                donenmin = a.dallar.Count;
+                
             }
             foreach (var item in bbb)
             {
@@ -258,6 +309,8 @@ namespace WindowsFormsApplication2
                 for (int i = 0; i < k.Count; i++)
                 {
                     a.dallar.Add(new liste());
+                    olusturulanlar.Add(a.dallar[a.dallar.Count - 1]);
+
                     a.dallar[a.dallar.Count - 1].cati = new sonuc[15];
                     a.cati.CopyTo(a.dallar[a.dallar.Count - 1].cati, 0);
                     for (int s = 0; s < etkilenenler.Count; s++)
@@ -266,13 +319,9 @@ namespace WindowsFormsApplication2
                     }
                 }
             }
-            donenmax = a.dallar.Count - 1;
+            
             a.parcalayan = this;
-            listesayili donenliste = new listesayili();
-            donenliste.donen = a.dallar;
-            donenliste.donenmin = donenmin;
-            donenliste.donenmax = donenmax;
-            return donenliste;
+            return olusturulanlar;
         }
     }
     public static class tanimlamalar
@@ -294,7 +343,7 @@ namespace WindowsFormsApplication2
             public sonuc[] cati;
             public macfiltre parcalayan = null;
             public List<liste> dallar = null;
-            public int olummin; public int olummax;
+
             public int boyut()
             {
                 int toplam = 0;
@@ -336,6 +385,10 @@ namespace WindowsFormsApplication2
             public int toplamkolon()
             {
                 int toplam = 0;
+                if (dead)
+                {
+                    return 0;
+                }
                 if (dallar == null)
                 {
                     return 1;
@@ -385,6 +438,10 @@ namespace WindowsFormsApplication2
             public List<liste> donen;
             public int donenmin;
             public int donenmax;
+
+            public listesayili(List<liste> donenk,int min,int max) {
+                donen = donenk;donenmin = min;donenmax = max;
+            }
         }
         [Flags]
         public enum sonuc : byte
