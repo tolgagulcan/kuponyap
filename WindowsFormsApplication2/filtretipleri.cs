@@ -303,6 +303,7 @@ namespace WindowsFormsApplication2
                 a.dallar = new List<liste>();
                 
             }
+            
             foreach (var item in bbb)
             {
                 List<int[]> k = buyuklisteler.listedondur(etkilenenler.Count, item.Key, item.Value);
@@ -443,7 +444,7 @@ namespace WindowsFormsApplication2
                 donen = donenk;donenmin = min;donenmax = max;
             }
         }
-        [Flags]
+        //[Flags]
         public enum sonuc : byte
         {
             bos = 0x0,
