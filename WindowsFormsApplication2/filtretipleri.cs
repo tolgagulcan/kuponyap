@@ -443,7 +443,7 @@ namespace WindowsFormsApplication2
                 donen = donenk;donenmin = min;donenmax = max;
             }
         }
-        [Flags]
+        //[Flags]
         public enum sonuc : byte
         {
             bos = 0x0,
