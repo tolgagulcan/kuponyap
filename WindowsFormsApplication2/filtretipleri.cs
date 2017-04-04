@@ -360,7 +360,7 @@ namespace WindowsFormsApplication2
                 {
                     foreach (var item in dallar)
                     {
-                        toplam = toplam + item.boyut();
+                        toplam += item.boyut();
                     }
                     return toplam;
                 }
@@ -400,7 +400,7 @@ namespace WindowsFormsApplication2
                     {
                         if (item.dead == false)
                         {
-                            toplam = toplam + item.toplamkolon();
+                            toplam += item.toplamkolon();
                         }
                     }
                     return toplam;
@@ -429,21 +429,27 @@ namespace WindowsFormsApplication2
                             carpim = 3;
                             break;
                     }
-                    boyut = boyut * carpim;
+                    boyut *= carpim;
                 }
                 return boyut;
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+       
         public class listesayili
         {
             public List<liste> donen;
             public int donenmin;
             public int donenmax;
 
-            public listesayili(List<liste> donenk,int min,int max) {
-                donen = donenk;donenmin = min;donenmax = max;
+            public listesayili(List<liste> donenk, int min, int max)
+            {
+                donen = donenk; donenmin = min; donenmax = max;
             }
-        }
+        } 
+   
         //[Flags]
         public enum sonuc : byte
         {

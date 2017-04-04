@@ -59,6 +59,19 @@ namespace WindowsFormsApplication2
             listeler[12] = new List<int[]>[105];
             listeler[13] = new List<int[]>[120];
             listeler[14] = new List<int[]>[136];
+
+
+            for (int i = 15; i <= 15; i++)
+            {
+                for (int a = 0; a <= i; a++)
+                {
+                    for (int k = a; k <= i; k++)
+                    {
+                        //System.Windows.Forms.MessageBox.Show(i.ToString()+"-"+a.ToString()+"-"+k.ToString());
+                        listedondur(i, a, k);
+                    }
+                }
+            }
         }
         public static int arrayindex(int sayi, int min, int max)
         {
