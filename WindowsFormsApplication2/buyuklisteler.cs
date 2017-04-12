@@ -3,7 +3,7 @@ namespace WindowsFormsApplication2
 {
     public static class buyuklisteler
     {
-        public static int[] katlar = new int[16] { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 };
+        //public static int[] katlar = new int[16] { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 };
         public static List<int[]> listedondur(int kactane,int min,int max)
         {
             if (listeler[kactane-1][arrayindex(kactane,min,max)]!=null)

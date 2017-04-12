@@ -438,18 +438,7 @@ namespace WindowsFormsApplication2
         /// 
         /// </summary>
        
-        public class listesayili
-        {
-            public List<liste> donen;
-            public int donenmin;
-            public int donenmax;
-
-            public listesayili(List<liste> donenk, int min, int max)
-            {
-                donen = donenk; donenmin = min; donenmax = max;
-            }
-        } 
-   
+  
         //[Flags]
         public enum sonuc : byte
         {
