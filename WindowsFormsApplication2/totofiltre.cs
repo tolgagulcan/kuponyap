@@ -43,7 +43,7 @@ namespace totofiltreleme
             filtrelertostr = filtreler;
             filtrekutusu.Clear();
 
-            string[] fline = filtreler.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] fline = filtreler.Split(new char[] { '&','\n','\r' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var mline in fline)
             {
                 filtrekutusu.Add(new macfiltre(mline));
