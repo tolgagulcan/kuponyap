@@ -65,9 +65,8 @@ namespace totofiltreleme
             }
 
             public macfiltre(string filtretext, macfiltre parent = null)
-
             {
-                filtretext = filtretext.Replace(Environment.NewLine, "&");
+
                 parentfiltre = parent;
 
                 string[] fline = filtretext.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -83,10 +82,24 @@ namespace totofiltreleme
                 }
 
                 string[] macvesayi = line.Split(new char[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
-                
+                string[] wntints;
 
+                int lenmaclar = macvesayi[0].Split(',').Length;
+                if (macvesayi.Length!=1)
+                {
+                     wntints = macvesayi[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                }
+                else
+                {
+                    wntints = new string[lenmaclar];
+                    for (int i = 0; i < lenmaclar; i++)
+                    {
+                        wntints[i] = i.ToString();
+                    }
 
-                string[] wntints = macvesayi[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+;                }
+
+               
 
                 int[] wnt = new int[wntints.Length];
                 for (int i = 0; i < wntints.Length; i++)
