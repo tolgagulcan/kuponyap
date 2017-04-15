@@ -57,7 +57,6 @@
             this.ilksecim.Name = "ilksecim";
             this.ilksecim.Size = new System.Drawing.Size(101, 429);
             this.ilksecim.TabIndex = 1;
-   
             // 
             // kuponolustur
             // 
@@ -76,7 +75,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
         #endregion
         private System.Windows.Forms.Button button1;

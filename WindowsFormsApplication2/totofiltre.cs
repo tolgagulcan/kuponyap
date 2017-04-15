@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-
 namespace totofiltreleme
 {
     partial class totofiltre
@@ -13,39 +12,26 @@ namespace totofiltreleme
         private List<macfiltre> filtrekutusu=new List<macfiltre>(50);
         private string catitostr="";
         private string filtrelertostr="";
-
         public void setcati(string catistr) {
             catitostr = catistr;
             catistr=catistr.Replace("01", "10").Replace("20", "02").Replace("21", "12").Replace("120", "102").Replace("012", "102").Replace("021", "102").Replace("210", "102").Replace("201", "102");
-
             string[] catiarray = catistr.Split('-');
             sonuc[] sonucarray = new sonuc[15];
-            
-
             for (int i = 0; i < 15; i++)
             {
-               
                 sonucarray[i] = (sonuc)Enum.Parse(typeof(sonuc), "m" + catiarray[i]);
             }
-
             cati = new liste();cati.cati = sonucarray;
-
-            
         }
-
         public string getcati()
         {
-
             return catitostr;
         }
-
         public void filtreekle(string filtreler) {
             filtreler = filtreler.Replace(Environment.NewLine, "&").Replace("\n","&");
-
             filtrelertostr = filtreler;
             filtrekutusu.Clear();
-
-            string[] fline = filtreler.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] fline = filtreler.Split(new char[] { '&','\n','\r' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var mline in fline)
             {
                 filtrekutusu.Add(new macfiltre(mline));
@@ -54,8 +40,6 @@ namespace totofiltreleme
         public string filtreeal() {
             return filtrelertostr;
         }
-
-
         private static Dictionary<int, sonuc> dicolustur(string line)
         {
             Dictionary<int, sonuc> g = new Dictionary<int, sonuc>();
@@ -75,7 +59,6 @@ namespace totofiltreleme
             }
             return g;
         }
-
         public void start() {
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -91,7 +74,6 @@ namespace totofiltreleme
             if (y.Count < 50000)
             {
                 System.IO.StreamWriter file = new System.IO.StreamWriter(Application.StartupPath + "\\" + "test.txt");
-                
                 string str = "";
                 foreach (var item in y)
                 {
@@ -100,12 +82,9 @@ namespace totofiltreleme
                     str = str.Replace("-01", "-10");
                     file.WriteLine(str);
                 }
-
                 file.Close(); ;
             }
-
         }
-
         private static List<int[]> listedondur(int kactane, int min, int max)
         {
             var hangiliste = listeler[kactane - 1][arrayindex(kactane, min, max)];
@@ -113,19 +92,14 @@ namespace totofiltreleme
             {
                 return hangiliste;
             }
-
             int sol = 0;int sag = kactane;int level = kactane;
             int[] kupon = new int[kactane];
-
             for (int i = 0; i < kactane; i++)
             {
                 kupon[i] = 2;
             }
-
             hangiliste = (listeler[kactane - 1][arrayindex(kactane, min, max)] = new List<int[]>());
-
             olustur(kactane, (min > max) ? max : min, (min > max) ? min : max, sol, sag, level, kupon, hangiliste);
-
             return hangiliste;
         }
         private static void olustur(int sayi, int min = 0, int max = 15, int sol = 0, int sag = 15, int level = 15, int[] kupon = null, List<int[]> kuponlar = null)
@@ -134,7 +108,6 @@ namespace totofiltreleme
             {
                 kuponlar.Add(kupon);
                 return;
-               
             }
             else if ((min < sol && max < sol) | (min > sag && max > sag) | (min < sol && max > sag) | (min > sag && max < sol))
             {
@@ -166,8 +139,6 @@ namespace totofiltreleme
             listeler[12] = new List<int[]>[105];
             listeler[13] = new List<int[]>[120];
             listeler[14] = new List<int[]>[136];
-
-            
             for (int i = 1; i <= 15; i++)
             {
                 for (int a = 0; a <= i; a++)
@@ -178,8 +149,6 @@ namespace totofiltreleme
                     }
                 }
             }
-
-    
         }
         private static int arrayindex(int sayi, int min, int max)
         {
@@ -218,9 +187,7 @@ namespace totofiltreleme
             m02 = m2 | m0,
             m12 = m1 | m2,
             m102 = m1 | m0 | m2,
-            
         }
-        
         private enum olmak : byte
         {
             hic = 0x0,
@@ -228,9 +195,5 @@ namespace totofiltreleme
             olmasin = 0x2,
             ikisi = olsun | olmasin
         }
-
     }
-
-    
-  
 }

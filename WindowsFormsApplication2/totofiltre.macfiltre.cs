@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 namespace totofiltreleme
 {
     partial class totofiltre
@@ -63,31 +62,32 @@ namespace totofiltreleme
                 tersfiltre = new macfiltre(etkilenenmaclar, a1, olmak.olsun);
                 return tersfiltre;
             }
-
             public macfiltre(string filtretext, macfiltre parent = null)
-
             {
-                filtretext = filtretext.Replace(Environment.NewLine, "&");
                 parentfiltre = parent;
-
                 string[] fline = filtretext.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-
                 string line = fline[0];
-
                 olmak sl = olmak.olsun;
-
                 if (line.IndexOf("f") != -1)
                 {
                     sl = olmak.olmasin;
                     line = line.Replace("f", "");
                 }
-
                 string[] macvesayi = line.Split(new char[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
-                
-
-
-                string[] wntints = macvesayi[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
+                string[] wntints;
+                int lenmaclar = macvesayi[0].Split(',').Length;
+                if (macvesayi.Length!=1)
+                {
+                     wntints = macvesayi[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                }
+                else
+                {
+                    wntints = new string[lenmaclar];
+                    for (int i = 0; i < lenmaclar; i++)
+                    {
+                        wntints[i] = i.ToString();
+                    }
+;                }
                 int[] wnt = new int[wntints.Length];
                 for (int i = 0; i < wntints.Length; i++)
                 {
@@ -101,16 +101,11 @@ namespace totofiltreleme
                     {
                         strtosub += fline[i];
                     }
-
                     subfiltre = new macfiltre(strtosub,this);
                 }
-
-
             }
-
             private void initmacfiltre(Dictionary<int, sonuc> k, int[] tane, olmak ols = olmak.olsun)
             {
-
                 if (tane.Length == 0 || tane.Length == (k.Count + 1))
                 {
                     throw new Exception("wrong number of wanted numbers");
@@ -118,9 +113,7 @@ namespace totofiltreleme
                 etkilenenmaclar = k;
                 olsunmu = ols;
                 sayi = tane.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min(); ;
-
             }
-
             public macfiltre(Dictionary<int, sonuc> k, int[] tane, olmak ols = olmak.olsun)
             {
                 initmacfiltre(k, tane, ols);
@@ -162,7 +155,6 @@ namespace totofiltreleme
                 }
                 return true;
             }
-
             private bool uygunmutoptan(liste a)
             {
                 if (subfiltre == null)
@@ -179,15 +171,11 @@ namespace totofiltreleme
                     {
                         return subfiltre.uygunmu(a);
                     }
-
                 }
-
-
-
             }
             private bool uygunmu(liste a, bool forcedead = true)
             {
-                macfiltre dfg = this;
+               
                 int uygun = 0;
                 bool dondur = true;
                 foreach (var item in etkilenenmaclar)
@@ -203,7 +191,6 @@ namespace totofiltreleme
                     {
                         a.dead = true;
                     }
-
                     return false;
                 }
                 return dondur;
@@ -221,29 +208,22 @@ namespace totofiltreleme
                     macfiltre s = deep();
                     List<liste> donentoplam = new List<liste>();
                     donentoplam.Add(a);
-
-
                     do
                     {
                         List<liste> yedek = new List<liste>();
                         k = null;
-
-
                         foreach (var item in donentoplam)
                         {
-
                             if (s != this)
                             {
                                 if (s.ters().uygunmu(item, false))
                                 {
                                     s.ters().parcala(item, false);
                                 }
-
                                 if (s.uygunmu(item, false))
                                 {
                                     k = s.parcala(item, false);
                                 }
-
                             }
                             else
                             {
@@ -252,19 +232,14 @@ namespace totofiltreleme
                                     s.parcala(item);
                                 }
                             }
-
-
-
                             if (k != null)
                             {
                                 foreach (var st in k)
                                 {
                                     yedek.Add(st);
                                 }
-
                             }
                         }
-
                         donentoplam = yedek;
                     } while ((s = s.parentfiltre) != null);
                 }
@@ -308,23 +283,17 @@ namespace totofiltreleme
                     {
                         a.dead = true;
                     }
-
                     olusturulanlar.Add(a);
-
                     return olusturulanlar;
                 }
                 if (etkilenenler.Count == 0)
                 {
                     olusturulanlar.Add(a);
-
                     return olusturulanlar;
-
                 }
                 if (bulunacaklar.Count == 0)
                 {
-
                     olusturulanlar.Add(a);
-
                     return olusturulanlar;
                 }
                 sonuc[,] degerler = new sonuc[olsun.Count, 3];
@@ -350,14 +319,10 @@ namespace totofiltreleme
                         bbb.Add(bulcomb[i], bulcomb[i]);
                     }
                 }
-
-
                 if (a.dallar == null)
                 {
                     a.dallar = new List<liste>();
-
                 }
-
                 foreach (var item in bbb)
                 {
                     List<int[]> k = totofiltre.listedondur(etkilenenler.Count, item.Key, item.Value);
@@ -365,7 +330,6 @@ namespace totofiltreleme
                     {
                         a.dallar.Add(new liste());
                         olusturulanlar.Add(a.dallar[a.dallar.Count - 1]);
-
                         a.dallar[a.dallar.Count - 1].cati = new sonuc[15];
                         a.cati.CopyTo(a.dallar[a.dallar.Count - 1].cati, 0);
                         for (int s = 0; s < etkilenenler.Count; s++)
@@ -374,14 +338,9 @@ namespace totofiltreleme
                         }
                     }
                 }
-
                 a.parcalayan = this;
                 return olusturulanlar;
             }
         }
-
     }
-
-
-
 }

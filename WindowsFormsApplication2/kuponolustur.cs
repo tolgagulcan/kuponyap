@@ -16,16 +16,13 @@ namespace WindowsFormsApplication2
         private void Form1_Load(object sender, EventArgs e)
         {
             initform();
-
             totofiltre.touchme = 2;
-
         }
         public void initform()
         {
             filtrefile = Application.StartupPath + "\\filtreler.txt";
             ilkfile = Application.StartupPath + "\\ilksecim.txt";
             //ilksecim.Draggable(true);
-            
             //Bu kod Usercontrol da 1 den 15 e kadar doldurur ve disabled yapar
             for (int i = 0; i < 15; i++)
             {
@@ -60,8 +57,6 @@ namespace WindowsFormsApplication2
                 file1.Close();
             }
         }
-
-     
         private void kuponolustur_FormClosed(object sender, FormClosedEventArgs e)
         {
             System.IO.StreamWriter file = new System.IO.StreamWriter(ilkfile);
@@ -77,17 +72,13 @@ namespace WindowsFormsApplication2
             }
             file1.Close();
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
-
             totofiltre yenifiltre = new totofiltre();
             string cati = string.Join("-", ilksecim.ilksecim());
-
-           
+            MessageBox.Show(cati);
             yenifiltre.setcati(cati);
             yenifiltre.filtreekle(rt1.Text);
-
             yenifiltre.start();
         }
     }

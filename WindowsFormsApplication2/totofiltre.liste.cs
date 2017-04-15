@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 namespace totofiltreleme
 {
     partial class totofiltre
@@ -11,7 +10,6 @@ namespace totofiltreleme
             public sonuc[] cati;
             public macfiltre parcalayan = null;
             public List<liste> dallar = null;
-
             public int boyut()
             {
                 int toplam = 0;
@@ -101,9 +99,5 @@ namespace totofiltreleme
                 return boyut;
             }
         }
-
     }
-
-    
-  
 }
