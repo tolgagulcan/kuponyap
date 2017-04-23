@@ -76,9 +76,9 @@ namespace totofiltreleme
                 string[] macvesayi = line.Split(new char[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] wntints;
                 int lenmaclar = macvesayi[0].Split(',').Length;
-                if (macvesayi.Length!=1)
+                if (macvesayi.Length != 1)
                 {
-                     wntints = macvesayi[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    wntints = macvesayi[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 }
                 else
                 {
@@ -87,7 +87,8 @@ namespace totofiltreleme
                     {
                         wntints[i] = i.ToString();
                     }
-;                }
+;
+                }
                 int[] wnt = new int[wntints.Length];
                 for (int i = 0; i < wntints.Length; i++)
                 {
@@ -95,13 +96,13 @@ namespace totofiltreleme
                 }
                 initmacfiltre(dicolustur(macvesayi[0]), wnt, sl);
                 string strtosub = "";
-                if (fline.Length>1)
+                if (fline.Length > 1)
                 {
                     for (int i = 1; i < fline.Length; i++)
                     {
                         strtosub += fline[i];
                     }
-                    subfiltre = new macfiltre(strtosub,this);
+                    subfiltre = new macfiltre(strtosub, this);
                 }
             }
             private void initmacfiltre(Dictionary<int, sonuc> k, int[] tane, olmak ols = olmak.olsun)
@@ -118,23 +119,11 @@ namespace totofiltreleme
             {
                 initmacfiltre(k, tane, ols);
             }
-            public bool broke(liste a)
+            public void broke(liste a)
             {
-                if (olsunmu == olmak.olmasin)
+                if (a.dead==true)
                 {
-                    if (ters() != null)
-                    {
-                        ters().broke(a);
-                    }
-                    else
-                    {
-                        a.dead = true;
-                    }
-                    return true;
-                }
-                if (a.dead)
-                {
-                    return false;
+                    return;
                 }
                 if (uygunmutoptan(a))
                 {
@@ -144,38 +133,38 @@ namespace totofiltreleme
                     }
                     else
                     {
-                        if (a.dallar.Count != 0)
+                        foreach (var item in a.dallar)
                         {
-                            foreach (var item in a.dallar)
-                            {
-                                broke(item);
-                            }
+                            broke(item);
                         }
                     }
                 }
-                return true;
             }
             private bool uygunmutoptan(liste a)
             {
                 if (subfiltre == null)
                 {
-                    return uygunmu(a);
+                    if (uygunmu(a)==false)
+                    {
+                        a.dead = true;
+                        return false;
+                    }
+                    return true;
                 }
                 else
                 {
-                    if (parentfiltre != null)
+                    macfiltre root = this;
+                    bool olum = true;
+                    do
                     {
-                        return subfiltre.uygunmu(a) & uygunmu(a);
-                    }
-                    else
-                    {
-                        return subfiltre.uygunmu(a);
-                    }
+                        olum = olum & root.uygunmu(a);
+                        root = root.subfiltre;
+                    } while (root != this.deep() && root != null);
+                    return olum;
                 }
             }
-            private bool uygunmu(liste a, bool forcedead = true)
+            private bool uygunmu(liste a)
             {
-               
                 int uygun = 0;
                 bool dondur = true;
                 foreach (var item in etkilenenmaclar)
@@ -187,66 +176,43 @@ namespace totofiltreleme
                 }
                 if (uygun < istenenmin)
                 {
-                    if (forcedead == true)
+                    dondur = false;
+                    if (subfiltre==null && parentfiltre==null)
                     {
                         a.dead = true;
                     }
-                    return false;
                 }
                 return dondur;
             }
-            private bool parcalatoptan(liste a)
+            private void parcalatoptan(liste a)
             {
                 if (subfiltre == null)
                 {
                     parcala(a);
-                    return true;
                 }
                 else
                 {
-                    List<liste> k;
-                    macfiltre s = deep();
-                    List<liste> donentoplam = new List<liste>();
-                    donentoplam.Add(a);
-                    do
+                    List<liste> k=null;
+                   if (ters().uygunmu(a))
                     {
-                        List<liste> yedek = new List<liste>();
-                        k = null;
-                        foreach (var item in donentoplam)
+                        ters().parcala(a);
+                    }
+                    if (uygunmu(a))
+                    {
+                        k = parcala(a);
+                    }
+                    if (k != null || k.Count!=0 )
+                    {
+                        foreach (var st in k)
                         {
-                            if (s != this)
-                            {
-                                if (s.ters().uygunmu(item, false))
-                                {
-                                    s.ters().parcala(item, false);
-                                }
-                                if (s.uygunmu(item, false))
-                                {
-                                    k = s.parcala(item, false);
-                                }
-                            }
-                            else
-                            {
-                                if (s.uygunmu(item))
-                                {
-                                    s.parcala(item);
-                                }
-                            }
-                            if (k != null)
-                            {
-                                foreach (var st in k)
-                                {
-                                    yedek.Add(st);
-                                }
-                            }
+                            this.subfiltre.broke(st);
                         }
-                        donentoplam = yedek;
-                    } while ((s = s.parentfiltre) != null);
+                    }
                 }
-                return true;
             }
-            private List<liste> parcala(liste a, bool forcedead = true)
+            private List<liste> parcala(liste a)
             {
+                macfiltre mf = this;
                 List<liste> olusturulanlar = new List<liste>();
                 List<int> etkilenenler = new List<int>();
                 List<sonuc> olsun = new List<sonuc>();
@@ -279,7 +245,7 @@ namespace totofiltreleme
                 }
                 if (halihazir > istenenmax)
                 {
-                    if (forcedead == true)
+                    if (subfiltre==null)
                     {
                         a.dead = true;
                     }

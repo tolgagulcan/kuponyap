@@ -70,7 +70,7 @@ namespace totofiltreleme
             MessageBox.Show("Toplam Süre (MSN): " + ((float)sw.ElapsedMilliseconds).ToString());
             List<sonuc[]> y = new List<sonuc[]>();
             cati.kolanlar(y);
-            MessageBox.Show("Toplam Kolon Sayısı=" + cati.boyut().ToString() + "- Toplam Kupon Sayısı=" + cati.toplamkolon().ToString());
+            MessageBox.Show("Toplam Para=" + ((float)cati.boyut()/(float)4).ToString("#,##0")+" TL " + "- Toplam Kupon Sayısı=" + cati.toplamkolon().ToString());
             if (y.Count < 50000)
             {
                 System.IO.StreamWriter file = new System.IO.StreamWriter(Application.StartupPath + "\\" + "test.txt");
