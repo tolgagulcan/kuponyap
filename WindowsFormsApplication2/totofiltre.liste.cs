@@ -6,10 +6,9 @@ namespace totofiltreleme
         private class liste
         {
             public bool dead = false;
-            public liste parent = null;
             public sonuc[] cati;
-            public macfiltre parcalayan = null;
-            public List<liste> dallar = null;
+            public List<liste> dallart = null;
+            public List<liste> dallarf = null;
             public int boyut()
             {
                 int toplam = 0;

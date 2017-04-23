@@ -11,25 +11,7 @@ namespace totofiltreleme
             private olmak olsunmu = olmak.olsun;
             int[] sayi; int istenenmax; int istenenmin;
             private macfiltre subfiltre = null;
-            private macfiltre parentfiltre = null;
             private macfiltre tersfiltre = null;
-            private macfiltre dipfiltre = null;
-            private macfiltre deep()
-            {
-                if (dipfiltre != null)
-                {
-                    return dipfiltre;
-                }
-                if (subfiltre == null)
-                {
-                    return dipfiltre = this;
-                }
-                else
-                {
-                    dipfiltre = subfiltre.deep();
-                }
-                return dipfiltre;
-            }
             private macfiltre ters()
             {
                 if (tersfiltre != null)
