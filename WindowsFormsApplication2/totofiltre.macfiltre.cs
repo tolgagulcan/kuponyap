@@ -8,28 +8,9 @@ namespace totofiltreleme
         private class macfiltre
         {
             private Dictionary<int, sonuc> etkilenenmaclar = null;
-            private olmak olsunmu = olmak.olsun;
             int[] sayi; int istenenmax; int istenenmin;
             private macfiltre subfiltre = null;
-            private macfiltre parentfiltre = null;
             private macfiltre tersfiltre = null;
-            private macfiltre dipfiltre = null;
-            private macfiltre deep()
-            {
-                if (dipfiltre != null)
-                {
-                    return dipfiltre;
-                }
-                if (subfiltre == null)
-                {
-                    return dipfiltre = this;
-                }
-                else
-                {
-                    dipfiltre = subfiltre.deep();
-                }
-                return dipfiltre;
-            }
             private macfiltre ters()
             {
                 if (tersfiltre != null)
@@ -62,17 +43,18 @@ namespace totofiltreleme
                 tersfiltre = new macfiltre(etkilenenmaclar, a1, olmak.olsun);
                 return tersfiltre;
             }
-            public macfiltre(string filtretext, macfiltre parent = null)
+            public macfiltre(string filtretext)
             {
-                parentfiltre = parent;
+
                 string[] fline = filtretext.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 string line = fline[0];
-                olmak sl = olmak.olsun;
+                bool tersi = false;
                 if (line.IndexOf("f") != -1)
                 {
-                    sl = olmak.olmasin;
+                    tersi = true;
                     line = line.Replace("f", "");
                 }
+
                 string[] macvesayi = line.Split(new char[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] wntints;
                 int lenmaclar = macvesayi[0].Split(',').Length;
@@ -102,22 +84,22 @@ namespace totofiltreleme
                     {
                         strtosub += fline[i];
                     }
-                    subfiltre = new macfiltre(strtosub, this);
+                    subfiltre = new macfiltre(strtosub);
                 }
             }
-            private void initmacfiltre(Dictionary<int, sonuc> k, int[] tane, olmak ols = olmak.olsun)
+            private void initmacfiltre(Dictionary<int, sonuc> k, int[] tane)
             {
                 if (tane.Length == 0 || tane.Length == (k.Count + 1))
                 {
                     throw new Exception("wrong number of wanted numbers");
                 }
                 etkilenenmaclar = k;
-                olsunmu = ols;
+                
                 sayi = tane.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min(); ;
             }
-            public macfiltre(Dictionary<int, sonuc> k, int[] tane, olmak ols = olmak.olsun)
+            public macfiltre(Dictionary<int, sonuc> k, int[] tane)
             {
-                initmacfiltre(k, tane, ols);
+                initmacfiltre(k, tane);
             }
             public void broke(liste a)
             {

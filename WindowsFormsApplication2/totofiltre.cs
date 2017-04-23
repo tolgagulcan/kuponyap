@@ -54,7 +54,7 @@ namespace totofiltreleme
                 max = (max == "21" ? "12" : max);
                 max = (max == "02" ? "20" : max);
                 int mn = int.Parse(min);
-                sonuc ax = (sonuc)Enum.Parse(typeof(sonuc), "m" + max);
+               sonuc ax = (sonuc)Enum.Parse(typeof(sonuc), "m" + max);
                 g.Add(mn, ax);
             }
             return g;
@@ -183,9 +183,9 @@ namespace totofiltreleme
             m1 = 0x1,
             m0 = 0x2,
             m2 = 0x4,
-            m10 = m1 | m0,
-            m02 = m2 | m0,
-            m12 = m1 | m2,
+            m10 = m1 | m0, m01 = m1 | m0,
+            m02 = m2 | m0, m20 = m2 | m0,
+            m12 = m1 | m2, m21 = m1 | m2,
             m102 = m1 | m0 | m2,
         }
         private enum olmak : byte

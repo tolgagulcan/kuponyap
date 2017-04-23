@@ -6,10 +6,9 @@ namespace totofiltreleme
         private class liste
         {
             public bool dead = false;
-            public liste parent = null;
             public sonuc[] cati;
-            public macfiltre parcalayan = null;
-            public List<liste> dallar = null;
+            public List<liste> dallart = null;
+            public List<liste> dallarf = null;
             public int boyut()
             {
                 int toplam = 0;
@@ -17,16 +16,27 @@ namespace totofiltreleme
                 {
                     return 0;
                 }
-                if (dallar == null)
+                if (dallart == null && dallarf==null)
                 {
                     return kuponboyut(cati);
                 }
                 else
                 {
-                    foreach (var item in dallar)
+                    if (dallart!=null)
                     {
-                        toplam += item.boyut();
+                        foreach (var item in dallart)
+                        {
+                            toplam += item.boyut();
+                        }
                     }
+                    if (dallarf != null)
+                    {
+                        foreach (var item in dallarf)
+                        {
+                            toplam += item.boyut();
+                        }
+                    }
+
                     return toplam;
                 }
             }
@@ -36,16 +46,28 @@ namespace totofiltreleme
                 {
                     return;
                 }
-                if (dallar == null)
+                if (dallart == null && dallarf==null)
                 {
                     k.Add(cati);
                 }
                 else
                 {
-                    foreach (var item in dallar)
+                    if (dallart!=null)
                     {
-                        item.kolanlar(k);
+                        foreach (var item in dallart)
+                        {
+                            item.kolanlar(k);
+                        }
                     }
+
+                    if (dallarf != null)
+                    {
+                        foreach (var item in dallarf)
+                        {
+                            item.kolanlar(k);
+                        }
+                    }
+
                 }
             }
             public int toplamkolon()
@@ -55,19 +77,28 @@ namespace totofiltreleme
                 {
                     return 0;
                 }
-                if (dallar == null)
+                if (dallart == null && dallarf==null)
                 {
                     return 1;
                 }
                 else
                 {
-                    foreach (var item in dallar)
+                    if (dallart!=null)
                     {
-                        if (item.dead == false)
+                        foreach (var item in dallart)
                         {
                             toplam += item.toplamkolon();
                         }
                     }
+
+                    if (dallarf != null)
+                    {
+                        foreach (var item in dallarf)
+                        {
+                            toplam += item.toplamkolon();
+                        }
+                    }
+
                     return toplam;
                 }
             }
