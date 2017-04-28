@@ -40,23 +40,18 @@ namespace totofiltreleme
                         nerde++;
                     }
                 }
-                tersfiltre = new macfiltre(etkilenenmaclar, a1, olmak.olsun);
+                tersfiltre = new macfiltre(etkilenenmaclar, a1);
                 return tersfiltre;
             }
+
             public macfiltre(string filtretext)
             {
 
                 string[] fline = filtretext.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 string line = fline[0];
-                bool tersi = false;
-                if (line.IndexOf("f") != -1)
-                {
-                    tersi = true;
-                    line = line.Replace("f", "");
-                }
-
                 string[] macvesayi = line.Split(new char[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] wntints;
+
                 int lenmaclar = macvesayi[0].Split(',').Length;
                 if (macvesayi.Length != 1)
                 {
@@ -76,7 +71,10 @@ namespace totofiltreleme
                 {
                     wnt[i] = int.Parse(wntints[i]);
                 }
-                initmacfiltre(dicolustur(macvesayi[0]), wnt, sl);
+
+                etkilenenmaclar = dicolustur(macvesayi[0]);
+                sayi = wnt.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min();
+
                 string strtosub = "";
                 if (fline.Length > 1)
                 {
@@ -87,115 +85,129 @@ namespace totofiltreleme
                     subfiltre = new macfiltre(strtosub);
                 }
             }
-            private void initmacfiltre(Dictionary<int, sonuc> k, int[] tane)
+            public macfiltre(Dictionary<int, sonuc> etk, int[] say,macfiltre sub=null)
             {
-                if (tane.Length == 0 || tane.Length == (k.Count + 1))
-                {
-                    throw new Exception("wrong number of wanted numbers");
-                }
-                etkilenenmaclar = k;
-                
-                sayi = tane.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min(); ;
+
+
+                etkilenenmaclar = etk;
+                sayi = say.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min();
+                subfiltre = sub;
             }
-            public macfiltre(Dictionary<int, sonuc> k, int[] tane)
-            {
-                initmacfiltre(k, tane);
-            }
+
+
             public void broke(liste a)
             {
+                bool uygun = uygunmu(a);
+
                 if (a.dead==true)
                 {
                     return;
                 }
-                if (uygunmutoptan(a))
+
+                if (uygun==false && subfiltre==null)
                 {
-                    if (a.dallar == null)
+                    a.dead = true;
+                    return;
+                }
+
+                if (uygun == false && subfiltre != null)
+                {
+                    return;
+                }
+
+                if (uygun == true && (a.dallarf!=null || a.dallart!=null))
+                {
+                    if (a.dallarf!=null)
                     {
-                        parcalatoptan(a);
-                    }
-                    else
-                    {
-                        foreach (var item in a.dallar)
+                        foreach (var item in a.dallarf)
                         {
                             broke(item);
                         }
                     }
-                }
-            }
-            private bool uygunmutoptan(liste a)
-            {
-                if (subfiltre == null)
-                {
-                    if (uygunmu(a)==false)
+
+                    if (a.dallart != null)
                     {
-                        a.dead = true;
-                        return false;
+                        foreach (var item in a.dallart)
+                        {
+                            broke(item);
+                        }
                     }
-                    return true;
+                    return;
                 }
-                else
-                {
-                    macfiltre root = this;
-                    bool olum = true;
-                    do
-                    {
-                        olum = olum & root.uygunmu(a);
-                        root = root.subfiltre;
-                    } while (root != this.deep() && root != null);
-                    return olum;
-                }
-            }
-            private bool uygunmu(liste a)
-            {
-                int uygun = 0;
-                bool dondur = true;
-                foreach (var item in etkilenenmaclar)
-                {
-                    if (nlookup[(int)a.cati[item.Key - 1] - 1, (int)item.Value - 1] != 1)
-                    {
-                        uygun++;
-                    }
-                }
-                if (uygun < istenenmin)
-                {
-                    dondur = false;
-                    if (subfiltre==null && parentfiltre==null)
-                    {
-                        a.dead = true;
-                    }
-                }
-                return dondur;
-            }
-            private void parcalatoptan(liste a)
-            {
-                if (subfiltre == null)
+
+                if (subfiltre==null)
                 {
                     parcala(a);
                 }
                 else
                 {
-                    List<liste> k=null;
-                   if (ters().uygunmu(a))
+                    if (ters()!=null)
                     {
                         ters().parcala(a);
                     }
-                    if (uygunmu(a))
+                    
+                    parcala(a,true);
+
+                    if (a.dallarf!=null)
                     {
-                        k = parcala(a);
-                    }
-                    if (k != null || k.Count!=0 )
-                    {
-                        foreach (var st in k)
+                        foreach (var item in a.dallarf)
                         {
-                            this.subfiltre.broke(st);
+                            subfiltre.broke(item);
                         }
                     }
+                    else
+                    {
+                        subfiltre.broke(a);
+                    }
+
+                   
+                    
+
                 }
+
+
             }
-            private List<liste> parcala(liste a)
+            
+            private bool uygunmu(liste a)
             {
-                macfiltre mf = this;
-                List<liste> olusturulanlar = new List<liste>();
+                int cikar = 0;
+                int pass = 0;
+                int parcala = 0;
+
+                foreach (var item in etkilenenmaclar)
+                {
+                    int deger = nlookup[(int)a.cati[item.Key - 1] - 1, (int)item.Value - 1];
+                    if (deger==0 )
+                    {
+                        cikar++;
+                    }
+
+                    if (deger == 1)
+                    {
+                        pass++;
+                    }
+
+                    if (deger == 2)
+                    {
+                        parcala++;
+                    }
+                }
+
+                for (int i = 0;i< sayi.Length; i++) {
+                    if (sayi[i]>=cikar && sayi[i]<=(cikar+parcala))
+                    {
+                        return true;
+                    }
+                }
+                
+                return false;
+               
+            }
+            
+            private void parcala(liste a,bool df=false)
+            {
+                
+
                 List<int> etkilenenler = new List<int>();
                 List<sonuc> olsun = new List<sonuc>();
                 List<sonuc> olmasin = new List<sonuc>();
@@ -225,26 +237,35 @@ namespace totofiltreleme
                         bulunacaklar.Add(item - halihazir);
                     }
                 }
-                if (halihazir > istenenmax)
+
+                if (etkilenenler.Count == 0 || bulunacaklar.Count == 0)
                 {
-                    if (subfiltre==null)
+                    return;
+                }
+
+                List<liste> hangidallar;
+                if (df)
+                {
+                    if (a.dallarf == null)
                     {
-                        a.dead = true;
+                        a.dallarf = new List<liste>();
                     }
-                    olusturulanlar.Add(a);
-                    return olusturulanlar;
+
+                    hangidallar = a.dallarf;
                 }
-                if (etkilenenler.Count == 0)
+                else
                 {
-                    olusturulanlar.Add(a);
-                    return olusturulanlar;
+                    if (a.dallart == null)
+                    {
+                        a.dallart = new List<liste>();
+                    }
+                    hangidallar = a.dallart;
                 }
-                if (bulunacaklar.Count == 0)
-                {
-                    olusturulanlar.Add(a);
-                    return olusturulanlar;
-                }
+
+                
+
                 sonuc[,] degerler = new sonuc[olsun.Count, 3];
+
                 for (int i = 0; i < olsun.Count; i++)
                 {
                     degerler[i, 0] = olsun[i];
@@ -267,27 +288,25 @@ namespace totofiltreleme
                         bbb.Add(bulcomb[i], bulcomb[i]);
                     }
                 }
-                if (a.dallar == null)
-                {
-                    a.dallar = new List<liste>();
-                }
+
+                
+
                 foreach (var item in bbb)
                 {
                     List<int[]> k = totofiltre.listedondur(etkilenenler.Count, item.Key, item.Value);
                     for (int i = 0; i < k.Count; i++)
                     {
-                        a.dallar.Add(new liste());
-                        olusturulanlar.Add(a.dallar[a.dallar.Count - 1]);
-                        a.dallar[a.dallar.Count - 1].cati = new sonuc[15];
-                        a.cati.CopyTo(a.dallar[a.dallar.Count - 1].cati, 0);
+                        hangidallar.Add(new liste());
+                       
+                        hangidallar[hangidallar.Count - 1].cati = new sonuc[15];
+                        a.cati.CopyTo(hangidallar[hangidallar.Count - 1].cati, 0);
                         for (int s = 0; s < etkilenenler.Count; s++)
                         {
-                            a.dallar[a.dallar.Count - 1].cati[etkilenenler[s] - 1] = degerler[s, k[i][s]];
+                           hangidallar[hangidallar.Count - 1].cati[etkilenenler[s] - 1] = degerler[s, k[i][s]];
                         }
                     }
                 }
-                a.parcalayan = this;
-                return olusturulanlar;
+                
             }
         }
     }
