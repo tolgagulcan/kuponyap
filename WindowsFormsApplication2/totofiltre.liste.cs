@@ -4,16 +4,12 @@ namespace totofiltreleme
     partial class totofiltre
     {
         public float toplampara() {
-
             return (float)cati.boyut() / 4;
         }
-
         public int toplamkolon()
         {
-
             return cati.toplamkolon();
         }
-
         private class liste
         {
             public bool dead = false;
@@ -47,7 +43,6 @@ namespace totofiltreleme
                             toplam += item.boyut();
                         }
                     }
-
                     return toplam;
                 }
             }
@@ -70,7 +65,6 @@ namespace totofiltreleme
                             item.kolanlar(k);
                         }
                     }
-
                     if (dallarf != null)
                     {
                         foreach (var item in dallarf)
@@ -78,7 +72,6 @@ namespace totofiltreleme
                             item.kolanlar(k);
                         }
                     }
-
                 }
             }
             public int toplamkolon()
@@ -101,7 +94,6 @@ namespace totofiltreleme
                             toplam += item.toplamkolon();
                         }
                     }
-
                     if (dallarf != null)
                     {
                         foreach (var item in dallarf)
@@ -109,7 +101,6 @@ namespace totofiltreleme
                             toplam += item.toplamkolon();
                         }
                     }
-
                     return toplam;
                 }
             }

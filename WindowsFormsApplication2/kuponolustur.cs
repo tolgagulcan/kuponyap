@@ -17,7 +17,7 @@ namespace WindowsFormsApplication2
         private void Form1_Load(object sender, EventArgs e)
         {
             initform();
-            totofiltre.touchme = 2;
+            //totofiltre.touchme = 2;
         }
         public void initform()
         {
@@ -78,13 +78,9 @@ namespace WindowsFormsApplication2
             totofiltre yenifiltre = new totofiltre();
             string cati = string.Join("-", ilksecim.ilksecim());
             //MessageBox.Show(cati);
-
-             
-
             yenifiltre.setcati(cati);
             yenifiltre.filtreekle(rt1.Text);
             yenifiltre.start();
-
             decimal a = (decimal)yenifiltre.toplampara();
             decimal fark = a - para;
             para = a;

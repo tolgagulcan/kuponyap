@@ -43,15 +43,12 @@ namespace totofiltreleme
                 tersfiltre = new macfiltre(etkilenenmaclar, a1);
                 return tersfiltre;
             }
-
             public macfiltre(string filtretext)
             {
-
                 string[] fline = filtretext.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 string line = fline[0];
                 string[] macvesayi = line.Split(new char[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] wntints;
-
                 int lenmaclar = macvesayi[0].Split(',').Length;
                 if (macvesayi.Length != 1)
                 {
@@ -71,10 +68,8 @@ namespace totofiltreleme
                 {
                     wnt[i] = int.Parse(wntints[i]);
                 }
-
                 etkilenenmaclar = dicolustur(macvesayi[0]);
                 sayi = wnt.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min();
-
                 string strtosub = "";
                 if (fline.Length > 1)
                 {
@@ -87,34 +82,26 @@ namespace totofiltreleme
             }
             public macfiltre(Dictionary<int, sonuc> etk, int[] say,macfiltre sub=null)
             {
-
-
                 etkilenenmaclar = etk;
                 sayi = say.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min();
                 subfiltre = sub;
             }
-
-
             public void broke(liste a)
             {
                 bool uygun = uygunmu(a);
-
                 if (a.dead==true)
                 {
                     return;
                 }
-
                 if (uygun==false && subfiltre==null)
                 {
                     a.dead = true;
                     return;
                 }
-
                 if (uygun == false && subfiltre != null)
                 {
                     return;
                 }
-
                 if (uygun == true && (a.dallarf!=null || a.dallart!=null))
                 {
                     if (a.dallarf!=null)
@@ -124,7 +111,6 @@ namespace totofiltreleme
                             broke(item);
                         }
                     }
-
                     if (a.dallart != null)
                     {
                         foreach (var item in a.dallart)
@@ -134,7 +120,6 @@ namespace totofiltreleme
                     }
                     return;
                 }
-
                 if (subfiltre==null)
                 {
                     parcala(a);
@@ -145,9 +130,7 @@ namespace totofiltreleme
                     {
                         ters().parcala(a);
                     }
-                    
                     parcala(a,true);
-
                     if (a.dallarf!=null)
                     {
                         foreach (var item in a.dallarf)
@@ -159,20 +142,13 @@ namespace totofiltreleme
                     {
                         subfiltre.broke(a);
                     }
-
-                                  
-
                 }
-
-
             }
-            
             private bool uygunmu(liste a)
             {
                 int cikar = 0;
                 int pass = 0;
                 int parcala = 0;
-
                 foreach (var item in etkilenenmaclar)
                 {
                     int deger = nlookup[(int)a.cati[item.Key - 1] - 1, (int)item.Value - 1];
@@ -180,36 +156,29 @@ namespace totofiltreleme
                     {
                         cikar++;
                     }
-
                     if (deger == 1)
                     {
                         pass++;
                     }
-
                     if (deger == 2)
                     {
                         parcala++;
                     }
                 }
-
                 for (int i = 0;i< sayi.Length; i++) {
                     if (sayi[i]>=cikar && sayi[i]<=(cikar+parcala))
                     {
                         return true;
                     }
                 }
-
                 if (subfiltre!=null && subfiltre.subfiltre!=null)
                 {
                     return subfiltre.uygunmu(a);
                 }
                 return false;
             }
-            
             private void parcala(liste a,bool df=false)
             {
-                
-
                 List<int> etkilenenler = new List<int>();
                 List<sonuc> olsun = new List<sonuc>();
                 List<sonuc> olmasin = new List<sonuc>();
@@ -239,12 +208,10 @@ namespace totofiltreleme
                         bulunacaklar.Add(item - halihazir);
                     }
                 }
-
                 if (etkilenenler.Count == 0 || bulunacaklar.Count == 0)
                 {
                     return;
                 }
-
                 List<liste> hangidallar;
                 if (df)
                 {
@@ -252,7 +219,6 @@ namespace totofiltreleme
                     {
                         a.dallarf = new List<liste>();
                     }
-
                     hangidallar = a.dallarf;
                 }
                 else
@@ -263,11 +229,7 @@ namespace totofiltreleme
                     }
                     hangidallar = a.dallart;
                 }
-
-                
-
                 sonuc[,] degerler = new sonuc[olsun.Count, 3];
-
                 for (int i = 0; i < olsun.Count; i++)
                 {
                     degerler[i, 0] = olsun[i];
@@ -290,16 +252,12 @@ namespace totofiltreleme
                         bbb.Add(bulcomb[i], bulcomb[i]);
                     }
                 }
-
-                
-
                 foreach (var item in bbb)
                 {
                     List<int[]> k = totofiltre.listedondur(etkilenenler.Count, item.Key, item.Value);
                     for (int i = 0; i < k.Count; i++)
                     {
                         hangidallar.Add(new liste());
-                       
                         hangidallar[hangidallar.Count - 1].cati = new sonuc[15];
                         a.cati.CopyTo(hangidallar[hangidallar.Count - 1].cati, 0);
                         for (int s = 0; s < etkilenenler.Count; s++)
@@ -308,7 +266,6 @@ namespace totofiltreleme
                         }
                     }
                 }
-                
             }
         }
     }

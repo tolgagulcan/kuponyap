@@ -60,8 +60,6 @@ namespace totofiltreleme
             return g;
         }
         public void start() {
-
-            
             Stopwatch sw = new Stopwatch();
             sw.Start();
             foreach (var item in filtrekutusu)
@@ -72,8 +70,6 @@ namespace totofiltreleme
             //MessageBox.Show("Toplam Süre (MSN): " + ((float)sw.ElapsedMilliseconds).ToString());
             List<sonuc[]> y = new List<sonuc[]>();
             cati.kolanlar(y);
-            
-
             if (y.Count < 50000)
             {
                 System.IO.StreamWriter file = new System.IO.StreamWriter(Application.StartupPath + "\\" + "test.txt");
@@ -191,12 +187,6 @@ namespace totofiltreleme
             m12 = m1 | m2, m21 = m1 | m2,
             m102 = m1 | m0 | m2,
         }
-        private enum olmak : byte
-        {
-            hic = 0x0,
-            olsun = 0x1,
-            olmasin = 0x2,
-            ikisi = olsun | olmasin
-        }
+       
     }
 }
