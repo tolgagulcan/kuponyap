@@ -160,8 +160,7 @@ namespace totofiltreleme
                         subfiltre.broke(a);
                     }
 
-                   
-                    
+                                  
 
                 }
 
@@ -199,9 +198,12 @@ namespace totofiltreleme
                         return true;
                     }
                 }
-                
+
+                if (subfiltre!=null && subfiltre.subfiltre!=null)
+                {
+                    return subfiltre.uygunmu(a);
+                }
                 return false;
-               
             }
             
             private void parcala(liste a,bool df=false)

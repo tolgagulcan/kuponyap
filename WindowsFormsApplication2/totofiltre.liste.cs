@@ -3,6 +3,17 @@ namespace totofiltreleme
 {
     partial class totofiltre
     {
+        public float toplampara() {
+
+            return (float)cati.boyut() / 4;
+        }
+
+        public int toplamkolon()
+        {
+
+            return cati.toplamkolon();
+        }
+
         private class liste
         {
             public bool dead = false;

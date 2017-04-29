@@ -60,6 +60,8 @@ namespace totofiltreleme
             return g;
         }
         public void start() {
+
+            
             Stopwatch sw = new Stopwatch();
             sw.Start();
             foreach (var item in filtrekutusu)
@@ -67,10 +69,11 @@ namespace totofiltreleme
                 item.broke(cati);
             }
             sw.Stop();
-            MessageBox.Show("Toplam Süre (MSN): " + ((float)sw.ElapsedMilliseconds).ToString());
+            //MessageBox.Show("Toplam Süre (MSN): " + ((float)sw.ElapsedMilliseconds).ToString());
             List<sonuc[]> y = new List<sonuc[]>();
             cati.kolanlar(y);
-            MessageBox.Show("Toplam Para=" + ((float)cati.boyut()/(float)4).ToString("#,##0")+" TL " + "- Toplam Kupon Sayısı=" + cati.toplamkolon().ToString());
+            
+
             if (y.Count < 50000)
             {
                 System.IO.StreamWriter file = new System.IO.StreamWriter(Application.StartupPath + "\\" + "test.txt");

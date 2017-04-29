@@ -9,6 +9,7 @@ namespace WindowsFormsApplication2
     public partial class kuponolustur : Form
     {
         string filtrefile, ilkfile;
+        public static decimal para = 0;
         public kuponolustur()
         {
             InitializeComponent();
@@ -76,10 +77,20 @@ namespace WindowsFormsApplication2
         {
             totofiltre yenifiltre = new totofiltre();
             string cati = string.Join("-", ilksecim.ilksecim());
-            MessageBox.Show(cati);
+            //MessageBox.Show(cati);
+
+             
+
             yenifiltre.setcati(cati);
             yenifiltre.filtreekle(rt1.Text);
             yenifiltre.start();
+
+            decimal a = (decimal)yenifiltre.toplampara();
+            decimal fark = a - para;
+            para = a;
+            label1.Text = "Toplam Para: "+String.Format("{0:C}",a);
+            label2.Text = "Toplam Kolon: " + yenifiltre.toplamkolon().ToString();
+            label3.Text = "Filtre Farkı: "+String.Format("{0:C}", fark);
         }
     }
 }
