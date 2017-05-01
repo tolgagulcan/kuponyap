@@ -168,13 +168,14 @@ namespace totofiltreleme
                 for (int i = 0;i< sayi.Length; i++) {
                     if (sayi[i]>=cikar && sayi[i]<=(cikar+parcala))
                     {
+                        if (subfiltre != null && subfiltre.subfiltre != null)
+                        {
+                            return subfiltre.uygunmu(a);
+                        }
                         return true;
                     }
                 }
-                if (subfiltre!=null && subfiltre.subfiltre!=null)
-                {
-                    return subfiltre.uygunmu(a);
-                }
+                
                 return false;
             }
             private void parcala(liste a,bool df=false)
@@ -252,7 +253,20 @@ namespace totofiltreleme
                         bbb.Add(bulcomb[i], bulcomb[i]);
                     }
                 }
-                foreach (var item in bbb)
+
+                Dictionary<int, int> bbb1 = new Dictionary<int, int>();
+                foreach (var item in bulcomb)
+                {
+                    bbb1.Add(item, item);
+                }
+
+                bool tekli = false;
+
+                Dictionary<int, int> secenek;
+
+                secenek = (tekli) ? bbb1 : bbb;
+
+                foreach (var item in secenek)
                 {
                     List<int[]> k = totofiltre.listedondur(etkilenenler.Count, item.Key, item.Value);
                     for (int i = 0; i < k.Count; i++)

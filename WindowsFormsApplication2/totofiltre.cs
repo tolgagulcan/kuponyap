@@ -60,13 +60,13 @@ namespace totofiltreleme
             return g;
         }
         public void start() {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
             foreach (var item in filtrekutusu)
             {
                 item.broke(cati);
             }
-            sw.Stop();
+            //sw.Stop();
             //MessageBox.Show("Toplam Süre (MSN): " + ((float)sw.ElapsedMilliseconds).ToString());
             List<sonuc[]> y = new List<sonuc[]>();
             cati.kolanlar(y);
@@ -138,16 +138,16 @@ namespace totofiltreleme
             listeler[12] = new List<int[]>[105];
             listeler[13] = new List<int[]>[120];
             listeler[14] = new List<int[]>[136];
-            for (int i = 1; i <= 15; i++)
-            {
-                for (int a = 0; a <= i; a++)
-                {
-                    for (int k = a; k <= i; k++)
-                    {
-                        listedondur(i, a, k);
-                    }
-                }
-            }
+            //for (int i = 1; i <= 15; i++)
+            //{
+            //    for (int a = 0; a <= i; a++)
+            //    {
+            //        for (int k = a; k <= i; k++)
+            //        {
+            //            listedondur(i, a, k);
+            //        }
+            //    }
+            //}
         }
         private static int arrayindex(int sayi, int min, int max)
         {
