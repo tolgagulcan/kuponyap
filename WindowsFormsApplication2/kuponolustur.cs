@@ -73,6 +73,23 @@ namespace WindowsFormsApplication2
             }
             file1.Close();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            System.IO.StreamWriter file = new System.IO.StreamWriter("ttercih.txt");
+            foreach (var item in ilksecim.kupondondur())
+            {
+                file.WriteLine(item);
+            }
+            file.Close();
+            System.IO.StreamWriter file1 = new System.IO.StreamWriter("tfiltreler.txt");
+            foreach (var item in rt1.Lines)
+            {
+                file1.WriteLine(item);
+            }
+            file1.Close();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             totofiltre yenifiltre = new totofiltre();
