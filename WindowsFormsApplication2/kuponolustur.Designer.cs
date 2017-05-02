@@ -48,7 +48,8 @@
             this.rt1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rt1.Location = new System.Drawing.Point(128, 12);
             this.rt1.Name = "rt1";
-            this.rt1.Size = new System.Drawing.Size(634, 582);
+            this.rt1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.rt1.Size = new System.Drawing.Size(634, 450);
             this.rt1.TabIndex = 4;
             this.rt1.Text = "";
             // 
@@ -114,7 +115,6 @@
             this.Controls.Add(this.rt1);
             this.Controls.Add(this.ilksecim);
             this.Controls.Add(this.button1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.IsMdiContainer = true;
             this.Name = "kuponolustur";
             this.ShowIcon = false;
