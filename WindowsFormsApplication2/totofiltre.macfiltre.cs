@@ -75,7 +75,7 @@ namespace totofiltreleme
                 {
                     for (int i = 1; i < fline.Length; i++)
                     {
-                        strtosub +=":"+ fline[i];
+                        strtosub += fline[i]+  ":";
                     }
                     subfiltre = new macfiltre(strtosub);
                 }
