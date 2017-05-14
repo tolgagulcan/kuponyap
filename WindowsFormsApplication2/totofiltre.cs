@@ -12,6 +12,12 @@ namespace totofiltreleme
         private List<macfiltre> filtrekutusu=new List<macfiltre>(50);
         private string catitostr="";
         private string filtrelertostr="";
+        private static bool tekli = false;
+        public totofiltre(bool tk) {
+
+            tekli = tk;
+        }
+
         public void setcati(string catistr) {
             catitostr = catistr;
             catistr=catistr.Replace("01", "10").Replace("20", "02").Replace("21", "12").Replace("120", "102").Replace("012", "102").Replace("021", "102").Replace("210", "102").Replace("201", "102");

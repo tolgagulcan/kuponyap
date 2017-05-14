@@ -92,7 +92,7 @@ namespace WindowsFormsApplication2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            totofiltre yenifiltre = new totofiltre();
+            totofiltre yenifiltre = new totofiltre(!checkBox1.Checked);
             string cati = string.Join("-", ilksecim.ilksecim());
             //MessageBox.Show(cati);
             yenifiltre.setcati(cati);

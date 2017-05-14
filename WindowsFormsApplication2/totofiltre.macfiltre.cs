@@ -260,7 +260,7 @@ namespace totofiltreleme
                     bbb1.Add(item, item);
                 }
 
-                bool tekli = false;
+               
 
                 Dictionary<int, int> secenek;
 

@@ -61,9 +61,6 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="KwCombinatorics">
-      <HintPath>..\..\..\..\DOSYALAR\Downloads\KwCombinatorics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
