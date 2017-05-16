@@ -17,36 +17,55 @@ namespace totofiltreleme
                 {
                     return tersfiltre;
                 }
-                int[] a1;
+               
+                tersfiltre = new macfiltre(etkilenenmaclar,tersarray(etkilenenmaclar,sayi));
+
+                return tersfiltre;
+            }
+
+            private int[] tersarray(Dictionary<int,sonuc> etksm,int[] wnt) {
+                List<int> a1 = new List<int>();
                 int nerde = 0;
-                if (sayi.Length >= (etkilenenmaclar.Count + 1))
-                {
-                    return null;
-                }
-                a1 = new int[etkilenenmaclar.Count + 1 - sayi.Length];
-                for (int i = 0; i <= etkilenenmaclar.Count; i++)
+
+                for (int i = 0; i <= etksm.Count; i++)
                 {
                     bool ekle = true;
-                    for (int s = 0; s < sayi.Length; s++)
+                    for (int s = 0; s < wnt.Length; s++)
                     {
-                        if (i == sayi[s])
+                        if (i == wnt[s])
                         {
                             ekle = false;
                         }
                     }
                     if (ekle)
                     {
-                        a1[nerde] = i;
+                        a1.Add(i);
                         nerde++;
                     }
                 }
-                tersfiltre = new macfiltre(etkilenenmaclar, a1);
-                return tersfiltre;
+
+                if (a1.Count == 0)
+                {
+                    a1.Add(-1);
+                }
+
+                return a1.ToArray();
             }
             public macfiltre(string filtretext)
             {
+                
+                
+
                 string[] fline = filtretext.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 string line = fline[0];
+
+                int tersmi = line.IndexOf('f');
+                if (tersmi != -1)
+                {
+                    line = line.Replace("f", "");
+                }
+
+
                 string[] macvesayi = line.Split(new char[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] wntints;
                 int lenmaclar = macvesayi[0].Split(',').Length;
@@ -69,6 +88,12 @@ namespace totofiltreleme
                     wnt[i] = int.Parse(wntints[i]);
                 }
                 etkilenenmaclar = dicolustur(macvesayi[0]);
+
+                if (tersmi != -1)
+                {
+                    wnt = tersarray(etkilenenmaclar,wnt);
+                }
+
                 sayi = wnt.OrderBy(i => i).ToArray(); istenenmax = sayi.Max(); istenenmin = sayi.Min();
                 string strtosub = "";
                 if (fline.Length > 1)
