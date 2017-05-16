@@ -17,13 +17,13 @@ namespace totofiltreleme
                 {
                     return tersfiltre;
                 }
-                int[] a1;
+                List<int> a1=new List<int>();
                 int nerde = 0;
                 if (sayi.Length >= (etkilenenmaclar.Count + 1))
                 {
                     return null;
                 }
-                a1 = new int[etkilenenmaclar.Count + 1 - sayi.Length];
+                
                 for (int i = 0; i <= etkilenenmaclar.Count; i++)
                 {
                     bool ekle = true;
@@ -36,15 +36,25 @@ namespace totofiltreleme
                     }
                     if (ekle)
                     {
-                        a1[nerde] = i;
+                        a1.Add(i);
                         nerde++;
                     }
                 }
-                tersfiltre = new macfiltre(etkilenenmaclar, a1);
+
+                if (a1.Count==0)
+                {
+                    a1.Add(-1);
+                }
+                tersfiltre = new macfiltre(etkilenenmaclar,a1.ToArray());
+
                 return tersfiltre;
             }
             public macfiltre(string filtretext)
             {
+                int tersmi = filtretext.IndexOf('f');
+                
+
+
                 string[] fline = filtretext.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 string line = fline[0];
                 string[] macvesayi = line.Split(new char[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
