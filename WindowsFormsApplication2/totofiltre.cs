@@ -117,7 +117,7 @@ namespace totofiltreleme
             else if ((min < sol && max < sol) | (min > sag && max > sag) | (min < sol && max > sag) | (min > sag && max < sol))
             {
 
-                if (level==1 && false)
+                if (level==1)
                 {
                     int[] p1 = new int[sayi]; kupon.CopyTo(p1, 0); p1[sayi - level] = -1;
                     kuponlar.Add(p1);
