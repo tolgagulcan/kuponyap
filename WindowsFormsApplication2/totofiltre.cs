@@ -147,16 +147,12 @@ namespace totofiltreleme
             int k = 0;
             foreach (var item in minmax)
             {
-                bool deger = false;
+                
                 if ((item.Key < sol && item.Value < sol) | (item.Key > sag && item.Value > sag) | (item.Key < sol && item.Value > sag) | (item.Key > sag && item.Value < sol))
                 {
                     k = k + 1;
                 }
-
-              
-
-
-
+                
 
             }
 
