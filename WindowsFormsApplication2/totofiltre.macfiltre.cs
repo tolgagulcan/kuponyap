@@ -296,6 +296,20 @@ namespace totofiltreleme
                     List<int[]> k = totofiltre.listedondur(etkilenenler.Count, item.Key, item.Value);
                     for (int i = 0; i < k.Count; i++)
                     {
+                        bool pass = false;
+                        for (int s = 0; s < etkilenenler.Count; s++)
+                        {
+                            if (k[i][s]==-1)
+                            {
+                                pass = true;
+                            }
+                        }
+
+                        if (pass)
+                        {
+                            continue;
+                        }
+
                         hangidallar.Add(new liste());
                         hangidallar[hangidallar.Count - 1].cati = new sonuc[15];
                         a.cati.CopyTo(hangidallar[hangidallar.Count - 1].cati, 0);

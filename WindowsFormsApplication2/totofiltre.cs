@@ -9,41 +9,45 @@ namespace totofiltreleme
     {
         public static int touchme = 0;
         private liste cati = null;
-        private List<macfiltre> filtrekutusu=new List<macfiltre>(50);
-        private string catitostr="";
-        private string filtrelertostr="";
+        private List<macfiltre> filtrekutusu = new List<macfiltre>(50);
+        private string catitostr = "";
+        private string filtrelertostr = "";
         private static bool tekli = false;
-        public totofiltre(bool tk) {
+        public totofiltre(bool tk)
+        {
 
             tekli = tk;
         }
 
-        public void setcati(string catistr) {
+        public void setcati(string catistr)
+        {
             catitostr = catistr;
-            catistr=catistr.Replace("01", "10").Replace("20", "02").Replace("21", "12").Replace("120", "102").Replace("012", "102").Replace("021", "102").Replace("210", "102").Replace("201", "102");
+            catistr = catistr.Replace("01", "10").Replace("20", "02").Replace("21", "12").Replace("120", "102").Replace("012", "102").Replace("021", "102").Replace("210", "102").Replace("201", "102");
             string[] catiarray = catistr.Split('-');
             sonuc[] sonucarray = new sonuc[15];
             for (int i = 0; i < 15; i++)
             {
                 sonucarray[i] = (sonuc)Enum.Parse(typeof(sonuc), "m" + catiarray[i]);
             }
-            cati = new liste();cati.cati = sonucarray;
+            cati = new liste(); cati.cati = sonucarray;
         }
         public string getcati()
         {
             return catitostr;
         }
-        public void filtreekle(string filtreler) {
-            filtreler = filtreler.Replace(Environment.NewLine, "&").Replace("\n","&");
+        public void filtreekle(string filtreler)
+        {
+            filtreler = filtreler.Replace(Environment.NewLine, "&").Replace("\n", "&");
             filtrelertostr = filtreler;
-            filtrekutusu.Clear();
-            string[] fline = filtreler.Split(new char[] { '&','\n','\r' }, StringSplitOptions.RemoveEmptyEntries);
+            //filtrekutusu.Clear();
+            string[] fline = filtreler.Split(new char[] { '&', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var mline in fline)
             {
                 filtrekutusu.Add(new macfiltre(mline));
             }
         }
-        public string filtreeal() {
+        public string filtreeal()
+        {
             return filtrelertostr;
         }
         private static Dictionary<int, sonuc> dicolustur(string line)
@@ -60,12 +64,13 @@ namespace totofiltreleme
                 max = (max == "21" ? "12" : max);
                 max = (max == "02" ? "20" : max);
                 int mn = int.Parse(min);
-               sonuc ax = (sonuc)Enum.Parse(typeof(sonuc), "m" + max);
+                sonuc ax = (sonuc)Enum.Parse(typeof(sonuc), "m" + max);
                 g.Add(mn, ax);
             }
             return g;
         }
-        public void start() {
+        public void start()
+        {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
             foreach (var item in filtrekutusu)
@@ -82,7 +87,7 @@ namespace totofiltreleme
                 string str = "";
                 foreach (var item in y)
                 {
-                    str = string.Join("-", item);
+                    str = string.Join("\t", item);
                     str = str.Replace("m", "");
                     str = str.Replace("-01", "-10");
                     file.WriteLine(str);
@@ -90,14 +95,29 @@ namespace totofiltreleme
                 file.Close(); ;
             }
         }
-        private static List<int[]> listedondur(int kactane, int min, int max)
+        public static List<int[]> listedondur(int kactane, Dictionary<int, int> minmax)
+        {
+
+
+            int sol = 0; int sag = kactane; int level = kactane;
+            int[] kupon = new int[kactane];
+            for (int i = 0; i < kactane; i++)
+            {
+                kupon[i] = 2;
+            }
+            List<int[]> hangiliste = new List<int[]>();
+            olustur(kactane, minmax, sol, sag, level, kupon, hangiliste);
+            return hangiliste;
+        }
+
+        public static List<int[]> listedondur(int kactane, int min, int max)
         {
             var hangiliste = listeler[kactane - 1][arrayindex(kactane, min, max)];
             if (hangiliste != null)
             {
                 return hangiliste;
             }
-            int sol = 0;int sag = kactane;int level = kactane;
+            int sol = 0; int sag = kactane; int level = kactane;
             int[] kupon = new int[kactane];
             for (int i = 0; i < kactane; i++)
             {
@@ -107,6 +127,67 @@ namespace totofiltreleme
             olustur(kactane, (min > max) ? max : min, (min > max) ? min : max, sol, sag, level, kupon, hangiliste);
             return hangiliste;
         }
+
+
+
+        private static void olustur(int sayi, Dictionary<int, int> minmax, int sol = 0, int sag = 15, int level = 15, int[] kupon = null, List<int[]> kuponlar = null)
+        {
+
+            
+
+            foreach (var item in minmax)
+            {
+                if (item.Key <= sol && item.Value >= sag)
+                {
+                    kuponlar.Add(kupon);
+                    return;
+                }
+            }
+
+            int k = 0;
+            foreach (var item in minmax)
+            {
+                bool deger = false;
+                if ((item.Key < sol && item.Value < sol) | (item.Key > sag && item.Value > sag) | (item.Key < sol && item.Value > sag) | (item.Key > sag && item.Value < sol))
+                {
+                    k = k + 1;
+                }
+
+              
+
+
+
+
+            }
+
+            if (k==minmax.Count)
+            {
+                int[] p1 = new int[sayi]; kupon.CopyTo(p1, 0);
+                if (level != 0)
+                {
+                    p1[sayi - level] = -1;
+
+                    kuponlar.Add(p1);
+
+                }
+
+                return;
+
+            }
+
+            {
+
+                int[] p1 = new int[sayi]; kupon.CopyTo(p1, 0); p1[sayi - level] = 1;
+                int[] p2 = new int[sayi]; kupon.CopyTo(p2, 0); p2[sayi - level] = 0;
+                olustur(sayi, minmax, sol, sag - 1, level - 1, p1, kuponlar);
+                olustur(sayi, minmax, sol + 1, sag, level - 1, p2, kuponlar);
+            }
+
+        }
+
+
+
+
         private static void olustur(int sayi, int min = 0, int max = 15, int sol = 0, int sag = 15, int level = 15, int[] kupon = null, List<int[]> kuponlar = null)
         {
             if (min <= sol && max >= sag)
@@ -116,14 +197,19 @@ namespace totofiltreleme
             }
             else if ((min < sol && max < sol) | (min > sag && max > sag) | (min < sol && max > sag) | (min > sag && max < sol))
             {
-
-                if (level==1 && false)
+                int[] p1 = new int[sayi]; kupon.CopyTo(p1, 0);
+                if (level != 0)
                 {
-                    int[] p1 = new int[sayi]; kupon.CopyTo(p1, 0); p1[sayi - level] = -1;
+                    p1[sayi - level] = -1;
+
                     kuponlar.Add(p1);
                 }
-                               
-                return;
+
+
+
+
+
+
             }
             else
             {
@@ -133,6 +219,10 @@ namespace totofiltreleme
                 olustur(sayi, min, max, sol + 1, sag, level - 1, p2, kuponlar);
             }
         }
+
+
+
+
         private static List<int[]>[][] listeler = new List<int[]>[15][];
         static totofiltre()
         {
@@ -200,6 +290,6 @@ namespace totofiltreleme
             m12 = m1 | m2, m21 = m1 | m2,
             m102 = m1 | m0 | m2,
         }
-       
+
     }
 }
