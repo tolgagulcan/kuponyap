@@ -559,10 +559,9 @@ namespace WindowsFormsApplication2
                 yenifiltre.filtreekle(item);
             }
 
-                     
-            
+                                 
             yenifiltre.start();
-            decimal a = (decimal)yenifiltre.toplampara();
+            decimal a = (decimal)yenifiltre.toplampara()*2;
             decimal fark = a - para;
             para = a;
             label1.Text = "Toplam Para: " + String.Format("{0:C}", a);
