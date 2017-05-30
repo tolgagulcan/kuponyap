@@ -20,7 +20,7 @@ namespace WindowsFormsApplication2
         private void Form1_Load(object sender, EventArgs e)
         {
             initform();
-            //totofiltre.touchme = 2;
+            //totofiltre.touchme = 2hjkjhk;
         }
         public void initform()
         {
@@ -93,7 +93,7 @@ namespace WindowsFormsApplication2
             file1.Close();
         }
 
-        private List<string> zincirolustur(List<string> olumlu, List<string> olumsuz,int[] istenensayi)
+        private List<string> zincirolustur(List<string> olumlu, List<string> olumsuz, int[] istenensayi)
         {
             int[] bulcomb = istenensayi;
             Dictionary<int, int> bbb = new Dictionary<int, int>();
@@ -115,64 +115,57 @@ namespace WindowsFormsApplication2
 
 
 
-                List<int[]> k = totofiltre.listedondur(olumlu.Count, bbb);
+            List<int[]> k = totofiltre.listedondur(olumlu.Count, bbb);
 
-                foreach (int[] ty in k)
+            foreach (int[] ty in k)
+            {
+                List<string> deger = new List<string>();
+                for (int i = 0; i < ty.Length; i++)
                 {
-                    List<string> deger = new List<string>();
-                    for (int i = 0; i < ty.Length; i++)
+                    if (ty[i] == 0)
                     {
-                        if (ty[i]==0)
-                        {
-                            deger.Add(olumlu[i]);
-                        }
-
-                        if (ty[i] == 1)
-                        {
-                            deger.Add(olumsuz[i]);
-                        }
-
-                        if (ty[i] == -1)
-                        {
-                            if (i!=0)
-                            {
-                                deger.Add("15-1>-1");
-                                break;
-                            }
-
-                            
-                        }
-
-                        if (ty[i] == 2)
-                        {
-                            if (i==ty.Length-1)
-                            {
-                                deger = null;
-                                break;
-                            }
-                            continue;
-                        }
-
-
-
+                        deger.Add(olumlu[i]);
                     }
 
-                    if (deger!=null)
+                    if (ty[i] == 1)
                     {
-                        sonuc.Add(string.Join(":",deger));
-
+                        deger.Add(olumsuz[i]);
                     }
 
-                   
+                    if (ty[i] == -1)
+                    {
+                        if (i != 0)
+                        {
+                            deger.Add("15-1>-1");
+                            break;
+                        }
+
+                   }
+
+                    if (ty[i] == 2)
+                    {
+                        deger.Add("15-1>0,1");
+                    }
+
+                    
+                }
+
+                if (deger != null)
+                {
+                    sonuc.Add(string.Join(":", deger));
 
                 }
 
 
-            
+
+            }
 
 
 
-              
+
+
+
+
 
             return sonuc;
 
@@ -180,9 +173,10 @@ namespace WindowsFormsApplication2
 
         }
 
-        string[] terssayi(int toplam,List<int> a) {
+        string[] terssayi(int toplam, List<int> a)
+        {
 
-            List<int> ters=new List<int>();
+            List<int> ters = new List<int>();
 
             bool ekle = true;
             for (int i = 0; i <= toplam; i++)
@@ -190,7 +184,7 @@ namespace WindowsFormsApplication2
                 ekle = true;
                 for (int k = 0; k < a.Count; k++)
                 {
-                    if (i==a[k])
+                    if (i == a[k])
                     {
                         ekle = false;
                     }
@@ -215,20 +209,18 @@ namespace WindowsFormsApplication2
         private List<string> filtredonustur(string filtretext)
         {
 
-            List<string> olumlu=new List<string>();
-            List<string> olumsuz=new List<string>();
-           
+            List<string> olumlu = new List<string>();
+            List<string> olumsuz = new List<string>();
+
             string[] filtrekutu = bol(filtretext, '>');
             string[] parcalar = bol(filtrekutu[0], ',');
-            List<int> isteneler=new List<int>();
+            List<int> isteneler = new List<int>();
 
             if (filtrekutu.Length == 1)
             {
-                for (int i = 0; i < parcalar.Length; i++)
-                {
-                    isteneler.Add(i);
-                }
+                isteneler.Add(parcalar.Length);
             }
+
             else
             {
                 string[] ist = filtrekutu[1].Split(',');
@@ -241,7 +233,7 @@ namespace WindowsFormsApplication2
 
             for (int i = 0; i < parcalar.Length; i++)
             {
-                if (parcalar[i][0]=='(' && parcalar[i][parcalar[i].Length-1]==')')
+                if (parcalar[i][0] == '(' && parcalar[i][parcalar[i].Length - 1] == ')')
                 {
                     parcalar[i] = parcalar[i].Substring(1, parcalar[i].Length - 2);
                 }
@@ -250,9 +242,9 @@ namespace WindowsFormsApplication2
 
             for (int i = 0; i < parcalar.Length; i++)
             {
-                string[] ic = bol(parcalar[i],':');
+                string[] ic = bol(parcalar[i], ':');
 
-                if (ic.Length>1)
+                if (ic.Length > 1)
                 {
                     string deger = String.Join(",", ic);
 
@@ -266,7 +258,7 @@ namespace WindowsFormsApplication2
                         k.Add(t);
                     }
 
-                    olumsuz.Add(deger + ">" + String.Join(",",terssayi(ic.Length,k)));
+                    olumsuz.Add(deger + ">" + String.Join(",", terssayi(ic.Length, k)));
 
 
                     continue;
@@ -274,7 +266,7 @@ namespace WindowsFormsApplication2
 
                 ic = bol(parcalar[i], '>');
 
-                if (ic.Length==2)
+                if (ic.Length == 2)
                 {
                     olumlu.Add(parcalar[i]);
 
@@ -287,18 +279,18 @@ namespace WindowsFormsApplication2
                     }
 
                     int count = bol(ic[0], ',').Length;
-                    olumsuz.Add(ic[0]+">"+string.Join(",", terssayi(count, t)));
+                    olumsuz.Add(ic[0] + ">" + string.Join(",", terssayi(count, t)));
                     continue;
                 }
-                if (ic.Length==1)
+                if (ic.Length == 1)
                 {
                     int sayi = bol(ic[0], ',').Length;
-                    string deger = parcalar[i]+">"+sayi.ToString();
+                    string deger = parcalar[i] + ">" + sayi.ToString();
                     olumlu.Add(deger);
                     List<int> t = new List<int>();
 
                     t.Add(sayi);
-                    olumsuz.Add(parcalar[i]+">"+string.Join(",",terssayi(sayi,t)));
+                    olumsuz.Add(parcalar[i] + ">" + string.Join(",", terssayi(sayi, t)));
 
 
                 }
@@ -307,8 +299,8 @@ namespace WindowsFormsApplication2
             }
 
             return zincirolustur(olumlu, olumsuz, isteneler.ToArray());
-            
-            
+
+
 
         }
 
@@ -317,7 +309,7 @@ namespace WindowsFormsApplication2
         {
 
             int numofac = 0;
-            int numofkapa = 0;
+
 
             int first = 0;
 
@@ -334,11 +326,11 @@ namespace WindowsFormsApplication2
                 }
                 if (filtretext[i] == ')')
                 {
-                    numofkapa++;
+                    numofac--;
                 }
                 if (filtretext[i] == seperator || i == filtretext.Length - 1)
                 {
-                    if (numofac == numofkapa)
+                    if (numofac == 0)
                     {
                         if (i == filtretext.Length - 1)
                         {
@@ -362,10 +354,10 @@ namespace WindowsFormsApplication2
 
                         first = i + 1;
                         numofac = 0;
-                        numofkapa = 0;
+
                     }
                 }
-                if (i == filtretext.Length - 1 && (numofac != numofkapa))
+                if (i == filtretext.Length - 1 && (numofac != 0))
                 {
                     throw new Exception("Hatavar " + filtretext);
                 }
@@ -384,55 +376,46 @@ namespace WindowsFormsApplication2
 
             List<string>[] zincirlisteler;
 
-            
 
-            if (Regex.IsMatch(filtretext,match))
+            string[] fline = bol(filtretext);
+
+
+            zincirlisteler = new List<string>[fline.Length];
+
+            for (int i = 0; i < fline.Length; i++)
             {
-                zincirlisteler = new List<string>[1];
-
-                zincirlisteler[0].Add(filtretext);
-            }
-            else
-            {
-                string[] fline = bol(filtretext);
-
-
-                zincirlisteler = new List<string>[fline.Length];
-
-                for (int i = 0; i < fline.Length; i++)
+                if (Regex.IsMatch(fline[i], match))
                 {
-                    if (Regex.IsMatch(fline[i],match))
+                    zincirlisteler[i] = new List<string>();
+                    zincirlisteler[i].Add(fline[i]);
+                }
+                else
+                {
+                    if (fline[i][0] == '(' && fline[i][fline[i].Length - 1] == ')')
                     {
-                        zincirlisteler[i] = new List<string>();
-                        zincirlisteler[i].Add(fline[i]);
+                        zincirlisteler[i] = filtredonustur(fline[i].Substring(1, fline[i].Length - 2));
                     }
                     else
                     {
-                        if (fline[i][0] == '(' && fline[i][fline[i].Length - 1] == ')')
-                        {
-                            zincirlisteler[i] = filtredonustur(fline[i].Substring(1, fline[i].Length - 2));
-                        }
-                        else
-                        {
-                            zincirlisteler[i] = filtredonustur(fline[i]);
-                        }
-
+                        zincirlisteler[i] = filtredonustur(fline[i]);
                     }
-
-
-
 
                 }
 
-            }
-            
 
-            return birlestir(zincirlisteler,':');
+                
+            }
+
+
+
+
+            return birlestir(zincirlisteler, ':');
 
 
         }
 
-        private List<string> birlestir(List<string>[] birlesecekler,char neile) {
+        private List<string> birlestir(List<string>[] birlesecekler, char neile)
+        {
 
 
             List<string> liste = new List<string>();
@@ -487,7 +470,7 @@ namespace WindowsFormsApplication2
                 {
 
                     sonfiltre += birlesecekler[h][index[h]];
-                    if (h!=birlesecekler.Length-1)
+                    if (h != birlesecekler.Length - 1)
                     {
                         sonfiltre += neile;
                     }
@@ -503,40 +486,45 @@ namespace WindowsFormsApplication2
 
         }
 
-       
+
         public string match = @"^(\d+-\d+)(,(\d+-\d+))*(?(>)(>-?\d+(,\d*)*))(:((\d+-\d+)(,(\d+-\d+))*(?(>)(>-?\d+(,\d*)*))))*$";
         private void button3_Click(object sender, EventArgs e)
         {
-            
+
 
             totofiltre yenifiltre = new totofiltre(!checkBox1.Checked);
             string cati = string.Join("-", ilksecim.ilksecim());
             yenifiltre.setcati(cati);
 
             List<string> tamamlisteler = new List<string>();
-            List<string> olusacaklisteler=new List<string>();
+            List<string> olusacaklisteler = new List<string>();
 
 
-            
 
             for (int i = 0; i < rt1.Lines.Length; i++)
             {
                 string line = rt1.Lines[i].Trim();
 
-                if (line!="")
+                if (line != "")
                 {
                     olusacaklisteler.Add(rt1.Lines[i]);
                 }
 
-                
+
             }
 
-
-            while (olusacaklisteler.Count!=0)
+            string[] stringSeparators = new string[] { ":15-1>-1:" };
+            while (olusacaklisteler.Count != 0)
             {
-               
+                //string[] strarray = olusacaklisteler[0].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
 
-                if (Regex.IsMatch(olusacaklisteler[0],match))
+
+                //if (strarray.Length>1)
+                //{
+                //    olusacaklisteler.RemoveAt(0); 
+                //}
+
+                if (Regex.IsMatch(olusacaklisteler[0], match))
                 {
                     tamamlisteler.Add(olusacaklisteler[0]);
                     olusacaklisteler.RemoveAt(0);
@@ -550,7 +538,7 @@ namespace WindowsFormsApplication2
                     olusacaklisteler.RemoveAt(0);
                 }
 
-               
+
             }
 
 
@@ -559,9 +547,9 @@ namespace WindowsFormsApplication2
                 yenifiltre.filtreekle(item);
             }
 
-                                 
+
             yenifiltre.start();
-            decimal a = (decimal)yenifiltre.toplampara()*2;
+            decimal a = (decimal)yenifiltre.toplampara() * 2;
             decimal fark = a - para;
             para = a;
             label1.Text = "Toplam Para: " + String.Format("{0:C}", a);
