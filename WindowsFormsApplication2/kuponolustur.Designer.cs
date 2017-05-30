@@ -49,10 +49,11 @@
             // rt1
             // 
             this.rt1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rt1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.rt1.Location = new System.Drawing.Point(128, 12);
             this.rt1.Name = "rt1";
             this.rt1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.rt1.Size = new System.Drawing.Size(634, 450);
+            this.rt1.Size = new System.Drawing.Size(932, 450);
             this.rt1.TabIndex = 4;
             this.rt1.Text = "";
             // 
@@ -70,7 +71,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label1.Location = new System.Drawing.Point(803, 79);
+            this.label1.Location = new System.Drawing.Point(1078, 53);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(68, 31);
             this.label1.TabIndex = 6;
@@ -80,7 +81,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label2.Location = new System.Drawing.Point(803, 125);
+            this.label2.Location = new System.Drawing.Point(1078, 99);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(68, 31);
             this.label2.TabIndex = 7;
@@ -90,7 +91,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label3.Location = new System.Drawing.Point(803, 174);
+            this.label3.Location = new System.Drawing.Point(1078, 148);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 31);
             this.label3.TabIndex = 8;
@@ -98,7 +99,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(768, 285);
+            this.button2.Location = new System.Drawing.Point(1066, 205);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(127, 56);
             this.button2.TabIndex = 10;
@@ -111,7 +112,7 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(809, 232);
+            this.checkBox1.Location = new System.Drawing.Point(1084, 182);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(82, 17);
             this.checkBox1.TabIndex = 12;
@@ -120,7 +121,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(794, 408);
+            this.button3.Location = new System.Drawing.Point(1084, 287);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(101, 63);
             this.button3.TabIndex = 14;
