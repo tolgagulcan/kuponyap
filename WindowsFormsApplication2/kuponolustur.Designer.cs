@@ -49,7 +49,7 @@
             // rt1
             // 
             this.rt1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rt1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.rt1.Font = new System.Drawing.Font("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.rt1.Location = new System.Drawing.Point(128, 12);
             this.rt1.Name = "rt1";
             this.rt1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
